@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Application">
+      <UniqueIdentifier>{472b0d94-a848-40a6-a7d4-fabcbd0f491d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{e6e66d8f-c476-4fda-b17c-4b7bb29c2bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RealWorldProblems">
+      <UniqueIdentifier>{f60d368a-d5c5-432e-8a00-0e696ae2ae15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RealWorldProblems\Graph">
+      <UniqueIdentifier>{2d93ac24-1e7b-4786-9d3b-31a43c9fea50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RealWorldProblems\Graph\PathFinding">
+      <UniqueIdentifier>{489161f8-8846-4178-a8a8-3241ce26f1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RealWorldProblems\Graph\TechTree">
+      <UniqueIdentifier>{3630e437-1548-4a8b-aa1b-9a47bb30813b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructures">
+      <UniqueIdentifier>{d3870f6b-1058-48aa-a6b2-107c1c80bb2b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Application\Main.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorld.cpp">
+      <Filter>RealWorldProblems\Graph\PathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\Tech.cpp">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTree.cpp">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.cpp">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeMain.cpp">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RealWorldProblems\Graph\GraphMain.cpp">
+      <Filter>RealWorldProblems\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\GameObject.cpp">
+      <Filter>DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\GameObject.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Log.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\StructureManager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorld.h">
+      <Filter>RealWorldProblems\Graph\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorldConstants.h">
+      <Filter>RealWorldProblems\Graph\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\Tech.h">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTree.h">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.h">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeConstants.h">
+      <Filter>RealWorldProblems\Graph\TechTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\BinarySearchTree.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\CircularQueue.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\GameObject.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\Graph.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\HashTable.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\LinkedList.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\OrderedArray.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\QueueArray.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\QueueList.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\RedBlackTree.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\StackArray.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\StackList.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\UnorderedArray.h">
+      <Filter>DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\GameObject.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Helpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\StructureManager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Vector2.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Vector3.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
