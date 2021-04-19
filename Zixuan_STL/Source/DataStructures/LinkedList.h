@@ -6,7 +6,7 @@
 
 // 0 = singly linkedlist
 // 1 = doubly linkedlist
-#define DOUBLY_LINKED 1
+#define DOUBLY_LINKED 0
 
 //--------------------------------------------------------------------------------------------------------------------
 // LinkedList class
@@ -62,7 +62,6 @@ public:
 	void Clear();
 	Value PopFront();
 	Value PopBack();
-	void Reverse();		// One of my interview question lol
 	
 	// API
 	bool Empty() const { return m_size <= 0; }
@@ -71,6 +70,8 @@ public:
 	Value HeadValue() const { return m_pHead->GetValue(); }
 	Node* Tail() const { return m_pTail; }
 	Value TailValue() const { return m_pTail->GetValue(); }
+	void Reverse(size_t begin = 0, size_t end = std::numeric_limits<size_t>::max());	
+	void Sort();
 
 	// Tests
 	static void Test();
@@ -87,6 +88,7 @@ private:
 	void SetNullptrIfEmpty();
 	void Delete(Node* pNodeToDelete, Node* pPrevious);
 	void DeleteNode(Node* pNodeToDelete);
+	void AssignNodeAtIndex(size_t index, Node* pNode);
 };
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -294,17 +296,42 @@ inline void LinkedList<Value>::DeleteByIndex(size_t index)
 }
 
 //--------------------------------------------------------------------------------------------------------------------
-// Reverse the whole list
+// Reverse the list of given begin and end, default to reverse the whole list
 // Time:  O(n)
 // Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Value>
-inline void LinkedList<Value>::Reverse()
+inline void LinkedList<Value>::Reverse(size_t begin/* = 0*/, size_t end/*= std::numeric_limits<size_t>::max()*/)
 {
-	// Data
-	Node* pCurrent = m_pHead;
+	assert(begin <= end);
+
+	// Data for relinking after reversing
+	Node* pStart = SearchNodeByIndex(begin);
+	Node* pStartPrev = nullptr;
+	if (begin > 0)
+		pStartPrev = SearchNodeByIndex(begin - 1);
+
+	Node* pEnd = nullptr;
+	if (end == std::numeric_limits<size_t>::max())
+	{
+		end = m_size - 1;
+		pEnd = m_pTail;
+	}
+	else
+	{
+		assert(end < m_size);
+		pEnd = SearchNodeByIndex(end);
+	}
+	Node* pEndNext = nullptr;
+	if (pEnd)
+		pEndNext = pEnd->m_pNext;
+
+	// Data for reversing
+	Node* pCurrent = pStart;
 	Node* pNext = nullptr;
 	Node* pPrev = nullptr;
+	if (begin != 0)
+		pPrev = SearchNodeByIndex(begin - 1);
 
 	// Walk through the list
 	while (pCurrent)
@@ -318,14 +345,63 @@ inline void LinkedList<Value>::Reverse()
 		pCurrent->m_pPrev = pNext;
 #endif
 
+		// Early quit if we reached the end
+		if (pCurrent == pEnd)
+			break;
+
 		// Move forward
 		pPrev = pCurrent;
 		pCurrent = pNext;
 	}
 
-	// Reset head and tail
-	m_pTail = m_pHead;
-	m_pHead = pPrev;
+	// Relink head and tail
+	if (pStartPrev)
+		pStartPrev->m_pNext = pEnd;
+	else
+		m_pHead = pEnd;
+
+	if (pEndNext)
+		pStart->m_pNext = pEndNext;
+	else
+	{
+		m_pTail = pStart;
+		pStart->m_pNext = nullptr;
+	}
+
+#pragma region WithoutSpacialReversing
+	//	Node* pCurrent = m_pHead;
+//	Node* pNext = nullptr;
+//	Node* pPrev = nullptr;
+//
+//	// Walk through the list
+//	while (pCurrent)
+//	{
+//		// Store next
+//		pNext = pCurrent->m_pNext;
+//
+//		// Relink current node's prev and next
+//		pCurrent->m_pNext = pPrev;
+//#if DOUBLY_LINKED
+//		pCurrent->m_pPrev = pNext;
+//#endif
+//
+//		// Move forward
+//		pPrev = pCurrent;
+//		pCurrent = pNext;
+//	}
+//
+//	// Reset head and tail
+//	m_pTail = m_pHead;
+//	m_pHead = pPrev;
+#pragma endregion
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Sort this list in numeric order
+//--------------------------------------------------------------------------------------------------------------------
+template<class Value>
+inline void LinkedList<Value>::Sort()
+{
 }
 
 template<class Value>
@@ -444,6 +520,7 @@ inline typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByNode(con
 
 //--------------------------------------------------------------------------------------------------------------------
 // Find and return the node with the passed in index, return nullptr if not found
+// Time: O(n), n = index
 //--------------------------------------------------------------------------------------------------------------------
 template<class Value>
 inline  typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByIndex(size_t index)
@@ -605,6 +682,15 @@ inline void LinkedList<Value>::DeleteNode(Node* pNodeToDelete)
 
 	// Reset head and tail if necessary
 	SetNullptrIfEmpty();
+}
+
+template<class Value>
+inline void LinkedList<Value>::AssignNodeAtIndex(size_t index, Node* pNode)
+{
+	Node* pSearchNode = m_pHead;
+	for (size_t i = 0; i < index; ++i)
+		pSearchNode = pSearchNode->m_pNext;
+	pSearchNode = pNode;
 }
 
 template<class Value>

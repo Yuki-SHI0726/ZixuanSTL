@@ -61,14 +61,25 @@ bool Run()
 
 int main()
 {
-	bool shouldQuit = false;
-	StructureManager::Get().Init();
+	//bool shouldQuit = false;
+	//StructureManager::Get().Init();
 
-	while (!shouldQuit)
-	{
-		StructureManager::Get().ShowStructures();
-		shouldQuit = Run();
-	}
+	//while (!shouldQuit)
+	//{
+	//	StructureManager::Get().ShowStructures();
+	//	shouldQuit = Run();
+	//}
+
+	LinkedList<int> list;
+	list.PushBack(2);
+	list.PushBack(7);
+	list.PushBack(9);
+	list.PushBack(13);
+	list.PushBack(3);
+	list.PushBack(6);
+
+	list.Reverse();
+	list.Print();
 
 	return 0;
 }
