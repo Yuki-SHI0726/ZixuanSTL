@@ -57,7 +57,7 @@
     <ClCompile Include="Source\Utils\HealthComponent.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DataStructures\GameObject.cpp">
+    <ClCompile Include="Source\Utils\GameObject.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,7 +137,7 @@
     <ClInclude Include="Source\Utils\HealthComponent.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DataStructures\GameObject.h">
+    <ClInclude Include="Source\Utils\GameObject.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

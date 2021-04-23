@@ -60,21 +60,14 @@ bool Run()
 
 int main()
 {
-	//bool shouldQuit = false;
-	//StructureManager::Get().Init();
+	bool shouldQuit = false;
+	StructureManager::Get().Init();
 
-	//while (!shouldQuit)
-	//{
-	//	StructureManager::Get().ShowStructures();
-	//	shouldQuit = Run();
-	//}
-
-	OrderedArray<char> test;
-	test.Emplace('t');
-	test.Emplace('a');
-	test.Emplace('e');
-	test.Emplace('z');
-	test.Print();
+	while (!shouldQuit)
+	{
+		StructureManager::Get().ShowStructures();
+		shouldQuit = Run();
+	}
 
 	return 0;
 }
