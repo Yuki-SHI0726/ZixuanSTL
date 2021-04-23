@@ -12,7 +12,6 @@
 #include "BinarySearchTree.h"
 #include "RedBlackTree.h"
 #include "Graph.h"
-#include "Utils/GameObject.h"
 
 #include <iostream>
 #include <conio.h>
@@ -70,16 +69,12 @@ int main()
 	//	shouldQuit = Run();
 	//}
 
-	LinkedList<int> list;
-	list.PushBack(2);
-	list.PushBack(7);
-	list.PushBack(9);
-	list.PushBack(13);
-	list.PushBack(3);
-	list.PushBack(6);
-
-	list.Reverse();
-	list.Print();
+	OrderedArray<char> test;
+	test.Emplace('t');
+	test.Emplace('a');
+	test.Emplace('e');
+	test.Emplace('z');
+	test.Print();
 
 	return 0;
 }

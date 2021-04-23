@@ -5,11 +5,11 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Queue implemented by Linkedlist
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
+template<class T>
 class QueueList
 {
 private:
-	LinkedList<Value> m_queueList;
+	LinkedList<T> m_queueList;
 
 	// Head is always list's Head
 	// Tail is always list's tail
@@ -17,12 +17,12 @@ private:
 public:
 	QueueList();
 
-	void Enqueue(const Value& val) { m_queueList.PushBack(val); }
-	Value Dequeue() { return m_queueList.PopFront(); }
+	void Enqueue(const T& val) { m_queueList.PushBack(val); }
+	T Dequeue() { return m_queueList.PopFront(); }
 	void Print() const;
 	void Clear() { m_queueList.Clear(); }
-	Value Head() const { return m_queueList.Head()->GetValue(); }
-	Value Tail() const { return m_queueList.Tail()->GetValue(); }
+	T Head() const { return m_queueList.Head()->GetValue(); }
+	T Tail() const { return m_queueList.Tail()->GetValue(); }
 	bool Empty() const { return m_queueList.Empty(); }
 	size_t GetSize() const { return m_queueList.GetSize(); }
 
@@ -32,8 +32,8 @@ public:
 //--------------------------------------------------------------------------------------------------------------------
 // Dtor
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline QueueList<Value>::QueueList()
+template<class T>
+inline QueueList<T>::QueueList()
 	: m_queueList{}
 {
 }
@@ -41,27 +41,27 @@ inline QueueList<Value>::QueueList()
 //--------------------------------------------------------------------------------------------------------------------
 // Print queue, mark where head and tail is
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void QueueList<Value>::Print() const
+template<class T>
+inline void QueueList<T>::Print() const
 {
 	m_queueList.Print("Head", "Tail");
 }
 
-template<class Value>
-inline void QueueList<Value>::Test()
+template<class T>
+inline void QueueList<T>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	Value value = 0;		// Be used value
+	T value = 0;		// Be used value
 
 	// Create queue
-	QueueList<Value> queueList{ };
+	QueueList<T> queueList{ };
 #if _DEBUG
-	queueList.Enqueue(static_cast<Value>(0));
-	queueList.Enqueue(static_cast<Value>(1));
-	queueList.Enqueue(static_cast<Value>(2));
-	queueList.Enqueue(static_cast<Value>(3));
+	queueList.Enqueue(static_cast<T>(0));
+	queueList.Enqueue(static_cast<T>(1));
+	queueList.Enqueue(static_cast<T>(2));
+	queueList.Enqueue(static_cast<T>(3));
 #endif
 
 	// Loop work

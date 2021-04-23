@@ -79,7 +79,7 @@ public:
 	constexpr void TransposeGraph();
 
 	// Search
-	constexpr bool BreadthFirstSearchFind(NodeId startNodeId, NodeId endNodeId);		// Assignment 12.2, not used in test function
+	constexpr bool BreadthFirstSearchFind(NodeId startNodeId, NodeId endNodeId);	
 	template <class Func> constexpr void BreadthFirstSearch(NodeId startNodeId, Func&& func);
 	template <class Func> constexpr void DepthFirstSearchIter(NodeId startNodeId, Func&& func);
 	template <class Func> constexpr void DepthFirstSearchRecur(NodeId startNodeId, Func&& func);
@@ -612,7 +612,7 @@ inline constexpr void Graph<Type>::BreadthFirstSearch(NodeId startNodeId, Func&&
 
 	// Declare the open set, which is the queue of nodes we need to visit, and push our starting node there.
 	std::queue<NodeId> openSet;
-	openSet.push(startNodeId);
+	openSet.emplace(startNodeId);
 
 	// Search begins here, quit search if openSet is empty
 	while (!openSet.empty())
@@ -637,7 +637,7 @@ inline constexpr void Graph<Type>::BreadthFirstSearch(NodeId startNodeId, Func&&
 
 				// close the node and add to the open set
 				m_vertices[kNeighbor].m_closed = true;
-				openSet.push(kNeighbor);
+				openSet.emplace(kNeighbor);
 			}
 		}
 	}
@@ -661,7 +661,7 @@ inline constexpr void Graph<Type>::DepthFirstSearchIter(NodeId startNodeId, Func
 
 	// Declare the open stack, which is the stack of nodes we need to visit, and push our starting node there.
 	std::stack<NodeId> openSet;
-	openSet.push(startNodeId);
+	openSet.emplace(startNodeId);
 
 	// Search begins here, quit search if openSet is empty
 	while (!openSet.empty())
@@ -685,7 +685,7 @@ inline constexpr void Graph<Type>::DepthFirstSearchIter(NodeId startNodeId, Func
 
 				// close the node and add to the open set
 				m_vertices[kTargetId].m_closed = true;
-				openSet.push(kTargetId);
+				openSet.emplace(kTargetId);
 			}
 		}
 	}
@@ -726,19 +726,19 @@ inline constexpr void Graph<Type>::RunDijkstraSearch(NodeId startNodeId, Func&& 
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
-	using Frontier = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
-	Frontier frontier(openSetPriorityFunc);
+	using OpenSet = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
+	OpenSet openSet(openSetPriorityFunc);
 
 	// add the start vertex and set it's dist to 0
 	m_vertices[startNodeId].m_distance = 0.0f;
-	frontier.push(startNodeId);
+	openSet.emplace(startNodeId);
 
 	// keep going as long as there's anything in the open set
-	while (!frontier.empty())
+	while (!openSet.empty())
 	{
 		// grab the best weight
-		NodeId nodeId = frontier.top();
-		frontier.pop();
+		NodeId nodeId = openSet.top();
+		openSet.pop();
 
 		// Perform func
 		func(nodeId, m_vertices[nodeId].m_data);
@@ -758,7 +758,7 @@ inline constexpr void Graph<Type>::RunDijkstraSearch(NodeId startNodeId, Func&& 
 			// to be the case the first time the node is seen because the distance is set to infinity, so this path is 
 			// guaranteed to be better.
 			if (Relax(nodeId, kNeighborNodeId, kWeight))
-				frontier.push(kNeighborNodeId);
+				openSet.emplace(kNeighborNodeId);
 		}
 	}
 }
@@ -786,19 +786,19 @@ inline constexpr std::vector<typename Graph<Type>::NodeId> Graph<Type>::RunDijks
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
-	using Frontier = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
-	Frontier frontier(openSetPriorityFunc);
+	using OpenSet = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
+	OpenSet openSet(openSetPriorityFunc);
 
 	// add the start vertex and set it's dist to 0
 	m_vertices[startNodeId].m_distance = 0.0f;
-	frontier.push(startNodeId);
+	openSet.emplace(startNodeId);
 
 	// keep going as long as there's anything in the open set
-	while (!frontier.empty())
+	while (!openSet.empty())
 	{
 		// grab the best weight
-		NodeId nodeId = frontier.top();
-		frontier.pop();
+		NodeId nodeId = openSet.top();
+		openSet.pop();
 
 		// Perform func
 		func(nodeId, m_vertices[nodeId].m_data);
@@ -825,7 +825,7 @@ inline constexpr std::vector<typename Graph<Type>::NodeId> Graph<Type>::RunDijks
 			// to be the case the first time the node is seen because the distance is set to infinity, so this path is 
 			// guaranteed to be better.
 			if (Relax(nodeId, kNeighborNodeId, kWeight))
-				frontier.push(kNeighborNodeId);
+				openSet.emplace(kNeighborNodeId);
 		}
 	}
 
@@ -857,19 +857,19 @@ inline constexpr void Graph<Type>::AStar(NodeId startNodeId, NodeId destNodeId, 
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
-	using Frontier = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
-	Frontier frontier(openSetPriorityFunc);
+	using OpenSet = std::priority_queue<NodeId, std::vector<NodeId>, decltype(openSetPriorityFunc)>;
+	OpenSet openSet(openSetPriorityFunc);
 
 	// add the start vertex and set it's dist to 0
 	m_vertices[startNodeId].m_distance = 0.0f;
-	frontier.push(startNodeId);
+	openSet.emplace(startNodeId);
 
 	// keep going as long as there's anything in the open set
-	while (!frontier.empty())
+	while (!openSet.empty())
 	{
 		// grab the best weight
-		NodeId currentNodeId = frontier.top();
-		frontier.pop();
+		NodeId currentNodeId = openSet.top();
+		openSet.pop();
 
 		// Perform func
 		func(currentNodeId, m_vertices[currentNodeId].m_data);
@@ -892,7 +892,7 @@ inline constexpr void Graph<Type>::AStar(NodeId startNodeId, NodeId destNodeId, 
 			{
 				m_vertices[kNeighborNodeId].m_distance = m_vertices[currentNodeId].m_distance + kWeight + Heuristic(destNodeId, kNeighborNodeId);
 				m_vertices[kNeighborNodeId].m_prev = currentNodeId;
-				frontier.push(kNeighborNodeId);
+				openSet.emplace(kNeighborNodeId);
 			}
 		}
 	}

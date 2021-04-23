@@ -11,17 +11,15 @@
 GameObject::GameObject()
 	: m_age{0}
 	, m_pName{"Unnamed"}
-	, m_pData{new float(10.0f) }
 {
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // GameObject parameter Ctor
 //--------------------------------------------------------------------------------------------------------------------
-GameObject::GameObject(int age, const char* pName, float* pData)
+GameObject::GameObject(int age, const char* pName)
 	: m_age{ age }
 	, m_pName{ pName }
-	, m_pData{ pData }
 {
 }
 
@@ -31,7 +29,6 @@ GameObject::GameObject(int age, const char* pName, float* pData)
 GameObject::GameObject(const GameObject& other)
 	: m_age{ other.m_age }
 	, m_pName{ other.m_pName }
-	, m_pData{ other.m_pData }
 {
 }
 
@@ -45,7 +42,6 @@ GameObject& GameObject::operator=(const GameObject& other)
 
 	m_age = other.m_age;
 	m_pName = other.m_pName;
-	m_pData = other.m_pData;
 	return *this;
 }
 
@@ -55,13 +51,7 @@ GameObject& GameObject::operator=(const GameObject& other)
 GameObject::GameObject(GameObject&& other) noexcept
 	: m_age{ other.m_age }
 	, m_pName{ std::move(other.m_pName) }
-	, m_pData{ nullptr }
 {
-	if (other.m_pData)
-	{
-		m_pData = new float(*other.m_pData);
-		other.m_pData = nullptr;
-	}
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -75,10 +65,6 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 	m_age = other.m_age;
 	m_pName = std::move(other.m_pName);
 
-	delete m_pData;
-	m_pData = other.m_pData;
-	other.m_pData = nullptr;
-
 	return *this;
 }
 
@@ -88,8 +74,6 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 GameObject::~GameObject()
 {
 	std::cout << "Delete GameObject: " << m_pName << std::endl;
-	delete m_pData;
-	m_pData = nullptr;
 }
 
 void GameObject::DoWork()
@@ -118,8 +102,8 @@ Person::Person()
 //--------------------------------------------------------------------------------------------------------------------
 // Person parameter ctor
 //--------------------------------------------------------------------------------------------------------------------
-Person::Person(int age, const char* pName, int id, float* pData)
-	: GameObject(age, pName, pData)
+Person::Person(int age, const char* pName, int id)
+	: GameObject(age, pName)
 	, m_id{ id }
 {
 }

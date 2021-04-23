@@ -21,11 +21,11 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Unorded array class
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
+template<class T>
 class UnorderedArray
 {
 private:
-    Value* m_pArray;
+    std::byte* m_pBuffer;
 
     size_t m_capacity; // was m_maxSize  
     size_t m_size;     // was m_numElements
@@ -37,16 +37,17 @@ public:
 
     // API
     void Clear();
-    void PushBack(const Value& val);
-    void PushFront(const Value& val);
-    Value& PopBack();
-    Value& PopFront();
+    void PushBack(const T& val);
+    void PushBack(T&& val);
+    void PushFront(const T& val);
+    template <class... Args> void EmplaceBack(Args&&... args);
+    T PopBack();
+    T PopFront();
     void Erase(size_t index);
-
-    Value& operator[](size_t index) const;
-
+    const T& operator[](size_t index) const;
+    T& operator[](size_t index);
     void Print() const;
-    std::optional<size_t> Search(const Value& val) const;
+    std::optional<size_t> Search(const T& val) const;
 
     // Sorting algorithms
     void BubbleSort();
@@ -77,9 +78,9 @@ private:
 //--------------------------------------------------------------------------------------------------------------------
 // Ctor, takes in the size of the array and dynamically allocate in the ctor
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline UnorderedArray<Value>::UnorderedArray(size_t capacity)
-    : m_pArray(nullptr)
+template<class T>
+inline UnorderedArray<T>::UnorderedArray(size_t capacity)
+    : m_pBuffer(nullptr)
     , m_capacity(0)
     , m_size(0)
 {
@@ -90,9 +91,9 @@ inline UnorderedArray<Value>::UnorderedArray(size_t capacity)
 //--------------------------------------------------------------------------------------------------------------------
 // Default ctor
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline UnorderedArray<Value>::UnorderedArray()
-    : m_pArray(nullptr)
+template<class T>
+inline UnorderedArray<T>::UnorderedArray()
+    : m_pBuffer(nullptr)
     , m_capacity(kInitialCapacity)
     , m_size(0)
 {
@@ -102,8 +103,8 @@ inline UnorderedArray<Value>::UnorderedArray()
 //--------------------------------------------------------------------------------------------------------------------
 // The destructor will need to clean up and deallocate any memory that was allocated in the constructor.
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline UnorderedArray<Value>::~UnorderedArray()
+template<class T>
+inline UnorderedArray<T>::~UnorderedArray()
 {
     Destroy();
 }
@@ -111,8 +112,8 @@ inline UnorderedArray<Value>::~UnorderedArray()
 //--------------------------------------------------------------------------------------------------------------------
 // Removes all elements from the array, set size back to 0
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Clear()
+template<class T>
+inline void UnorderedArray<T>::Clear()
 {
     Destroy();
     m_size = 0;
@@ -122,16 +123,42 @@ inline void UnorderedArray<Value>::Clear()
 // Takes in a value to be inserted at the end of the array
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::PushBack(const Value& val)
+template<class T>
+inline void UnorderedArray<T>::PushBack(const T& val)
 {
     // If the array is full, expand it
     if (m_size >= m_capacity)
         Expand(m_capacity * kExpandMultiplier);
 
-    // Add element to the end of the array
-    m_pArray[m_size] = val;
-    //new(m_pBuffer + (m_size * sizeof(T))) T(val);  // std::byte* m_pBuffer
+    //// Add element to the end of the array
+    //m_pArray[m_size] = val;
+
+    new(m_pBuffer + (m_size * sizeof(T))) T(val);  // std::byte* m_pBuffer
+    ++m_size;
+}
+
+template<class T>
+inline void UnorderedArray<T>::PushBack(T&& val)
+{
+    // If the array is full, expand it
+    if (m_size >= m_capacity)
+        Expand(m_capacity * kExpandMultiplier);
+
+    new(m_pBuffer + (m_size * sizeof(T))) T(val);  // std::byte* m_pBuffer
+    ++m_size;
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Emplace an object at the end of the array
+//--------------------------------------------------------------------------------------------------------------------
+template<class T>
+template<class ...Args>
+inline void UnorderedArray<T>::EmplaceBack(Args && ...args)
+{
+    if (m_size >= m_capacity)
+        Expand(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
+
+    new(m_pBuffer + (m_size * sizeof(T))) T(std::forward<Args>(args)...);
     ++m_size;
 }
 
@@ -139,8 +166,8 @@ inline void UnorderedArray<Value>::PushBack(const Value& val)
 // Takes in a value to be inserted at the begin of the array
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::PushFront(const Value& val)
+template<class T>
+inline void UnorderedArray<T>::PushFront(const T& val)
 {
 }
 
@@ -148,29 +175,32 @@ inline void UnorderedArray<Value>::PushFront(const Value& val)
 // Removes the last element of the array. Return the element's reference
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline Value& UnorderedArray<Value>::PopBack()
+template<class T>
+inline T UnorderedArray<T>::PopBack()
 {
     // Underflow checking
     assert(!Empty());
 
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+    T object = pTypeArray[m_size - 1];
+
     // If the element is not trivially destructible, call it's destructor
-    if constexpr (!std::is_trivially_destructible_v<Value>)
-        m_pArray[m_size - 1].~T();
+    if constexpr (!std::is_trivially_destructible_v<T>)
+        pTypeArray[m_size - 1].~T();
 
     // Reduce array size
     --m_size;
 
     // Return element
-    return m_pArray[m_size];
+    return object;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Removes the last element of the array. Return the element's reference
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline Value& UnorderedArray<Value>::PopFront()
+template<class T>
+inline T UnorderedArray<T>::PopFront()
 {
     // TODO: insert return statement here
 }
@@ -178,18 +208,20 @@ inline Value& UnorderedArray<Value>::PopFront()
 //--------------------------------------------------------------------------------------------------------------------
 // Takes an index of the element that should be removed, and removes it from the array.
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Erase(size_t index)
+template<class T>
+inline void UnorderedArray<T>::Erase(size_t index)
 {
     assert(index >= 0 && index < m_size && !Empty());
 
+    // Create TypeArray
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+
     // If the element is not trivially destructible, call it's destructor
-    if constexpr (!std::is_trivially_destructible_v<Value>)
-        m_pArray[index].~T();
+    if constexpr (!std::is_trivially_destructible_v<T>)
+        pTypeArray[index].~T();
 
     // Move every element after the indexed element one spot forward.
-    for (size_t i = index; i < (m_size - 1); ++i)
-        m_pArray[i] = m_pArray[i + 1];
+    std::memmove(pTypeArray + index, pTypeArray + index + 1, (m_size - index) * sizeof(T));
 
     // Reduce array size
     --m_size;
@@ -198,34 +230,49 @@ inline void UnorderedArray<Value>::Erase(size_t index)
 //--------------------------------------------------------------------------------------------------------------------
 // Return a reference of a particular element.
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline Value& UnorderedArray<Value>::operator[](size_t index) const
+template<class T>
+inline const T& UnorderedArray<T>::operator[](size_t index) const
 {
     assert(index >= 0 && index < m_size && !Empty());
-    return m_pArray[index];
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+    return pTypeArray[index];
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Return a reference of a particular element.
+//--------------------------------------------------------------------------------------------------------------------
+template<class T>
+inline T& UnorderedArray<T>::operator[](size_t index)
+{
+    assert(index >= 0 && index < m_size && !Empty());
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+    return pTypeArray[index];
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Print out every element
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Print() const
+template<class T>
+inline void UnorderedArray<T>::Print() const
 {
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
     std::cout << "Elements: { ";
     for (size_t i = 0; i < m_size; ++i)
-        std::cout << m_pArray[i] << ", ";
+        std::cout << pTypeArray[i] << ", ";
     std::cout << "} " << std::endl;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Linear search
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline std::optional<size_t> UnorderedArray<Value>::Search(const Value& val) const
+template<class T>
+inline std::optional<size_t> UnorderedArray<T>::Search(const T& val) const
 {
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+
     for (size_t i = 0; i < m_size; ++i)
     {
-        if (m_pArray[i] == val)
+        if (pTypeArray[i] == val)
             return i;
     }
     return {};
@@ -234,10 +281,11 @@ inline std::optional<size_t> UnorderedArray<Value>::Search(const Value& val) con
 //--------------------------------------------------------------------------------------------------------------------
 // Bubble Sort implementation
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::BubbleSort()
+template<class T>
+inline void UnorderedArray<T>::BubbleSort()
 {
-    static_assert(std::is_arithmetic_v<Value>, "Template parameter must be an arithmetic type");
+    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through the array from back to begin, this is the unsorted part
     for (size_t unsortedIndex = m_size - 1; unsortedIndex > 0; --unsortedIndex)
@@ -246,8 +294,8 @@ inline void UnorderedArray<Value>::BubbleSort()
         for (size_t keyIndex = 0; keyIndex < unsortedIndex; ++keyIndex)
         {
             // If current key if great than the next element, which means we need to swap their location
-            if (m_pArray[keyIndex] > m_pArray[keyIndex + 1])
-                std::swap(m_pArray[keyIndex], m_pArray[keyIndex + 1]);
+            if (pTypeArray[keyIndex] > pTypeArray[keyIndex + 1])
+                std::swap(pTypeArray[keyIndex], pTypeArray[keyIndex + 1]);
         }
     }
 }
@@ -255,10 +303,11 @@ inline void UnorderedArray<Value>::BubbleSort()
 //--------------------------------------------------------------------------------------------------------------------
 // Selection Sort implementation
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::SelectionSort()
+template<class T>
+inline void UnorderedArray<T>::SelectionSort()
 {
-    static_assert(std::is_arithmetic_v<Value>, "Template parameter must be an arithmetic type");
+    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through the array
     for (size_t i = 0; i < m_size; ++i)
@@ -270,61 +319,61 @@ inline void UnorderedArray<Value>::SelectionSort()
         for (size_t unsortedIndex = i + 1; unsortedIndex < m_size; ++unsortedIndex)
         {
             // If current element is less than current min element, update min to current index
-            if (m_pArray[unsortedIndex] < m_pArray[minIndex])
+            if (pTypeArray[unsortedIndex] < pTypeArray[minIndex])
                 minIndex = unsortedIndex;   
         }
 
         // If min indexed element is less than current element
-        if (m_pArray[minIndex] < m_pArray[i])
-            std::swap(m_pArray[minIndex], m_pArray[i]);
+        if (pTypeArray[minIndex] < pTypeArray[i])
+            std::swap(pTypeArray[minIndex], pTypeArray[i]);
     }
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Insertion Sort implementation
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::InsertionSort()
+template<class T>
+inline void UnorderedArray<T>::InsertionSort()
 {
-    static_assert(std::is_arithmetic_v<Value>, "Template parameter must be an arithmetic type");
+    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through array from index 1
     for (size_t keyIndex = 1; keyIndex < m_size; ++keyIndex)
     {
         // Get the key at current index for comparing
-        Value key = m_pArray[keyIndex];
+        T key = pTypeArray[keyIndex];
 
         // Get an index for iterating through the sorted part of the array
         size_t sortedIndex = keyIndex - 1;
          
         // While we need to move key to left
-        while (sortedIndex >= 0 && m_pArray[sortedIndex] > key)
+        while (sortedIndex >= 0 && pTypeArray[sortedIndex] > key)
         {
             // Moves the element in sorted part
-            m_pArray[sortedIndex + 1] = m_pArray[sortedIndex];
+            pTypeArray[sortedIndex + 1] = pTypeArray[sortedIndex];
             --sortedIndex;
         }
 
         // Update the key to the correct location
-        m_pArray[sortedIndex + 1] = key;
+        pTypeArray[sortedIndex + 1] = key;
     }
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Public Quick-sort interface
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::QuickSort()
+template<class T>
+inline void UnorderedArray<T>::QuickSort()
 {
-    //static_assert(std::is_arithmetic_v<Value>, "Template parameter must be an arithmetic type");
     QuickSort(0, m_size - 1);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Quick Sort implementation
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::QuickSort(size_t start, size_t end)
+template<class T>
+inline void UnorderedArray<T>::QuickSort(size_t start, size_t end)
 {
     if (start < end && end != std::numeric_limits<size_t>::max())
     {
@@ -337,40 +386,41 @@ inline void UnorderedArray<Value>::QuickSort(size_t start, size_t end)
 //--------------------------------------------------------------------------------------------------------------------
 // Randomly rearranges elements in the array
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Shuffle()
+template<class T>
+inline void UnorderedArray<T>::Shuffle()
 {
-    for (size_t i = 0; i < m_size; ++i) 
-        std::swap(m_pArray[i], m_pArray[rand() % m_size]);
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+    for (size_t i = 0; i < m_size; ++i)
+        std::swap(pTypeArray[i], pTypeArray[rand() % m_size]);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Unit tests
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Test()
+template<class T>
+inline void UnorderedArray<T>::Test()
 {
     // Variables for testing
     bool shouldQuit = false;
     size_t i = 0;       // Used as capacity and index
-    Value value = 0;		// Be used as value
+    T value = 0;		// Be used as value
 
     // I'm tired typing in initial size and elements to test sorting algorithms
 #if _DEBUG
     // Create array
-    UnorderedArray<Value> unorderedArray{ static_cast<size_t>(12) };
-    unorderedArray.PushBack(static_cast<Value>(13));
-    unorderedArray.PushBack(static_cast<Value>(19));
-    unorderedArray.PushBack(static_cast<Value>(9));
-    unorderedArray.PushBack(static_cast<Value>(5));
-    unorderedArray.PushBack(static_cast<Value>(12));
-    unorderedArray.PushBack(static_cast<Value>(8));
-    unorderedArray.PushBack(static_cast<Value>(7));
-    unorderedArray.PushBack(static_cast<Value>(4));
-    unorderedArray.PushBack(static_cast<Value>(21));
-    unorderedArray.PushBack(static_cast<Value>(2));
-    unorderedArray.PushBack(static_cast<Value>(6));
-    unorderedArray.PushBack(static_cast<Value>(11));
+    UnorderedArray<T> unorderedArray{ static_cast<size_t>(12) };
+    unorderedArray.PushBack(static_cast<T>(13));
+    unorderedArray.PushBack(static_cast<T>(19));
+    unorderedArray.PushBack(static_cast<T>(9));
+    unorderedArray.PushBack(static_cast<T>(5));
+    unorderedArray.PushBack(static_cast<T>(12));
+    unorderedArray.PushBack(static_cast<T>(8));
+    unorderedArray.PushBack(static_cast<T>(7));
+    unorderedArray.PushBack(static_cast<T>(4));
+    unorderedArray.PushBack(static_cast<T>(21));
+    unorderedArray.PushBack(static_cast<T>(2));
+    unorderedArray.PushBack(static_cast<T>(6));
+    unorderedArray.PushBack(static_cast<T>(11));
 
 #else
     // Get capacity from user
@@ -429,46 +479,46 @@ inline void UnorderedArray<Value>::Test()
 //--------------------------------------------------------------------------------------------------------------------
 // Create a bigger array, update capacity, copy and move elements from previous array to the new one
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Expand(size_t newCapacity)
+template<class T>
+inline void UnorderedArray<T>::Expand(size_t newCapacity)
 {
-    assert(newCapacity >= m_capacity);
+    const size_t newBufferSize = newCapacity * sizeof(T);
 
-    // Update capacity
-    m_capacity = newCapacity;
+    std::byte* pNewBuffer = new std::byte[newBufferSize];
 
-    // Create a new array with new capacity.
-    Value* pNewArray = new Value[m_capacity];
-
-    // If the current array has data, copy it over to our new array and deallocate it
-    if (m_size > 0)
+    // if the current buffer has data, copy it over to our new buffer and deallocate
+    if (m_capacity > 0)
     {
-        std::memcpy(pNewArray, m_pArray, sizeof(Value) * m_size);
-        Destroy();
+        std::memcpy(pNewBuffer, m_pBuffer, sizeof(T) * m_size);
+        delete[] m_pBuffer;
     }
 
-    // Update m_pArray to pNewArray
-    m_pArray = pNewArray;
+    // point to the new buffer and new capacity
+    m_pBuffer = pNewBuffer;
+    m_capacity = newCapacity;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Delete pArray and set it to nullptr
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void UnorderedArray<Value>::Destroy()
+template<class T>
+inline void UnorderedArray<T>::Destroy()
 {
     // If the type of elements is not trivially destructible, call it's destructor
-    if constexpr (!std::is_trivially_destructible_v<Value>)
+    if constexpr (!std::is_trivially_destructible_v<T>)
     {
+        T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
         for (size_t i = 0; i < m_size; ++i)
-            m_pArray[i].~Value();
+        {
+            pTypeArray[i].~T();
+        }
     }
 
     // If m_pArray is not nullptr, deallocate it and set it to nullptr
-    if (m_pArray != nullptr)
+    if (m_pBuffer)
     {
-        delete[] m_pArray;
-        m_pArray = nullptr;
+        delete[] m_pBuffer;
+        m_pBuffer = nullptr;
     }
 }
 
@@ -480,9 +530,11 @@ inline void UnorderedArray<Value>::Destroy()
 //		3) Unrestricted / unknown, from j to pivot
 //		4) pivot
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline size_t UnorderedArray<Value>::Partition(size_t start, size_t end)
+template<class T>
+inline size_t UnorderedArray<T>::Partition(size_t start, size_t end)
 {
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+
 #if (PIVOT_PICK == 0)    // Randomized element
     // chose a random index from the array 
     // replace the element at that index with the element at the last index of the array.
@@ -491,30 +543,30 @@ inline size_t UnorderedArray<Value>::Partition(size_t start, size_t end)
 #elif (PIVOT_PICK == 1)    // Median of Three
     // examines the first, middle, and last elements of the array, find the middle's index
     // the value that is in the middle gets swapped with the last element
-    std::swap(m_pArray[GetMidIndex(start, end)], m_pArray[end]);
+    std::swap(pTypeArray[GetMidIndex(start, end)], pTypeArray[end]);
 
 #endif
 
-    Value pivot = m_pArray[end];    // Pivot element value
+    T pivot = pTypeArray[end];    // Pivot element value
     size_t i = start - 1;       // i is the last element's index of region 1, which is less than the pivot
 
     // j is the current processing element's index
     for (size_t j = start; j < end; ++j)
     {
         // See if current element should be placed to region one
-        if (m_pArray[j] <= pivot)
+        if (pTypeArray[j] <= pivot)
         {
             // Grow region 1.
             ++i;
 
             // Swap last element in region 1 with current processing element.
-            std::swap(m_pArray[i], m_pArray[j]);
+            std::swap(pTypeArray[i], pTypeArray[j]);
         }
     }
 
     // Everything is in its place except for the pivot.  We swap the pivot with the first element of region 2.
     size_t pivotIndex = i + 1;
-    std::swap(m_pArray[pivotIndex], m_pArray[end]);
+    std::swap(pTypeArray[pivotIndex], pTypeArray[end]);
 
     // return the pivot, which becomes the beginning and end points of the next calls to Partition().
     return pivotIndex;
@@ -524,13 +576,15 @@ inline size_t UnorderedArray<Value>::Partition(size_t start, size_t end)
 //--------------------------------------------------------------------------------------------------------------------
 // Helper function for Median of three QuickSort
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline size_t UnorderedArray<Value>::GetMidIndex(size_t start, size_t end) const
+template<class T>
+inline size_t UnorderedArray<T>::GetMidIndex(size_t start, size_t end) const
 {
+    T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+
     // Get each elements
-    Value first = m_pArray[start];
-    Value mid = m_pArray[end / 2];
-    Value last = m_pArray[end];
+    T first = pTypeArray[start];
+    T mid = pTypeArray[end / 2];
+    T last = pTypeArray[end];
 
     // Compare and return mid index
     if (first > mid)

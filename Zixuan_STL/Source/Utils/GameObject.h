@@ -9,16 +9,16 @@ class GameObject
 protected:
 	int m_age;
 	const char* m_pName;
-	float* m_pData;
+	float* m_pData;	// TODO: change this to template
 
 public:
 	GameObject();
-	GameObject(int age, const char* pName, float* pData);
+	GameObject(int age, const char* pName);
 	GameObject(const GameObject& other);
 	GameObject& operator=(const GameObject& other);
 	GameObject(GameObject&& other) noexcept;
 	GameObject& operator=(GameObject&& other) noexcept;
-	virtual ~GameObject();
+	~GameObject();
 
 	virtual void DoWork();
 	virtual bool IsAdult() const;
@@ -34,7 +34,7 @@ private:
 
 public:
 	Person();
-	Person(int age, const char* pName, int id, float* pData);
+	Person(int age, const char* pName, int id);
 	Person(const Person& other);
 	Person& operator=(const Person& other);
 	Person(Person&& other) noexcept;
@@ -46,18 +46,3 @@ public:
 
 	int GetId() const { return m_id; }
 };
-
-// Paste this to a cpp file to cout objects
-#if 0
-std::ostream& operator<<(std::ostream& stream, GameObject* pObject)
-{
-	stream << "Name: " << pObject->GetName() << ", age: " << pObject->GetAge();
-
-	if (Person* pPerson = dynamic_cast<Person*>(pObject); pPerson != nullptr)
-	{
-		stream << ", Person id: " << pPerson->GetId();
-	}
-
-	return stream;
-}
-#endif

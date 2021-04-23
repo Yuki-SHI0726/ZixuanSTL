@@ -45,16 +45,19 @@
     <ClCompile Include="Source\RealWorldProblems\Graph\GraphMain.cpp">
       <Filter>RealWorldProblems\Graph</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DataStructures\GameObject.cpp">
-      <Filter>DataStructures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\GameObject.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utils\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utils\StructureManager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Actor.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\HealthComponent.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\GameObject.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,9 +84,6 @@
       <Filter>DataStructures</Filter>
     </ClInclude>
     <ClInclude Include="Source\DataStructures\CircularQueue.h">
-      <Filter>DataStructures</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DataStructures\GameObject.h">
       <Filter>DataStructures</Filter>
     </ClInclude>
     <ClInclude Include="Source\DataStructures\Graph.h">
@@ -116,9 +116,6 @@
     <ClInclude Include="Source\DataStructures\UnorderedArray.h">
       <Filter>DataStructures</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\GameObject.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utils\Helpers.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -132,6 +129,15 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Vector3.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Actor.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\HealthComponent.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\GameObject.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

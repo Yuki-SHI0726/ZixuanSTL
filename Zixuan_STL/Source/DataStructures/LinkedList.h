@@ -11,7 +11,7 @@
 //--------------------------------------------------------------------------------------------------------------------
 // LinkedList class
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value> 
+template<class T> 
 class LinkedList
 {
 private:
@@ -23,9 +23,9 @@ private:
 		Node* m_pPrev;
 #endif
 		// The value that this node holds
-		Value m_value;
+		T m_value;
 
-		Node(Value value)
+		Node(T value)
 			: m_pNext{ nullptr }
 #if DOUBLY_LINKED
 			, m_pPrev{ nullptr }
@@ -41,7 +41,7 @@ private:
 #endif
 		}
 
-		Value GetValue() const { return m_value; }
+		T GetValue() const { return m_value; }
 	};
 
 	Node* m_pHead;
@@ -52,24 +52,24 @@ public:
 	LinkedList();
 	~LinkedList();
 
-	void PushFront(const Value& val);
-	void PushBack(const Value& val);
-	void Insert(size_t index, const Value& val);
-	void DeleteByValue(const Value& val);
+	void PushFront(const T& val);
+	void PushBack(const T& val);
+	void Insert(size_t index, const T& val);
+	void DeleteByValue(const T& val);
 	void DeleteByNode(Node* pNode);
 	void DeleteByIndex(size_t index);
 	void Print(const char* pPrefix = "", const char* pSuffix = "") const;
 	void Clear();
-	Value PopFront();
-	Value PopBack();
+	T PopFront();
+	T PopBack();
 	
 	// API
 	bool Empty() const { return m_size <= 0; }
 	size_t GetSize() const { return m_size; }
 	Node* Head() const { return m_pHead; }
-	Value HeadValue() const { return m_pHead->GetValue(); }
+	T HeadValue() const { return m_pHead->GetValue(); }
 	Node* Tail() const { return m_pTail; }
-	Value TailValue() const { return m_pTail->GetValue(); }
+	T TailValue() const { return m_pTail->GetValue(); }
 	void Reverse(size_t begin = 0, size_t end = std::numeric_limits<size_t>::max());	
 	void Sort();
 
@@ -77,10 +77,10 @@ public:
 	static void Test();
 	
 private:
-	Node* SearchNodeByValue(const Value& val);
+	Node* SearchNodeByValue(const T& val);
 	Node* SearchNodeByNode(const Node* pNode);
 	Node* SearchNodeByIndex(size_t index);
-	std::pair<Node*, Node*> SearchPairByValue(const Value& val);	// Return the searched node and it's previous
+	std::pair<Node*, Node*> SearchPairByValue(const T& val);	// Return the searched node and it's previous
 	std::pair<Node*, Node*> SearchPairByNode(const Node* pNode);	// Return the searched node and it's previous
 	std::pair<Node*, Node*> SearchPairByIndex(size_t index);		// Return the searched node and it's previous
 
@@ -94,8 +94,8 @@ private:
 //--------------------------------------------------------------------------------------------------------------------
 // Default ctor
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline LinkedList<Value>::LinkedList()
+template<class T>
+inline LinkedList<T>::LinkedList()
 	: m_pHead{ nullptr }
 	, m_pTail{ nullptr }
 	, m_size{ 0 }
@@ -105,8 +105,8 @@ inline LinkedList<Value>::LinkedList()
 //--------------------------------------------------------------------------------------------------------------------
 // Default dtor
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline LinkedList<Value>::~LinkedList()
+template<class T>
+inline LinkedList<T>::~LinkedList()
 {
 	Destroy();
 }
@@ -115,8 +115,8 @@ inline LinkedList<Value>::~LinkedList()
 // Insert val to front
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::PushFront(const Value& val)
+template<class T>
+inline void LinkedList<T>::PushFront(const T& val)
 {
 	// Create new node for pushing
 	Node* pNewNode = new Node(val);
@@ -145,8 +145,8 @@ inline void LinkedList<Value>::PushFront(const Value& val)
 // Insert val to back
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::PushBack(const Value& val)
+template<class T>
+inline void LinkedList<T>::PushBack(const T& val)
 {
 	// Create new node
 	Node* pNewNode = new Node(val);
@@ -175,8 +175,8 @@ inline void LinkedList<Value>::PushBack(const Value& val)
 // Insert val to the index
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Insert(size_t index, const Value& val)
+template<class T>
+inline void LinkedList<T>::Insert(size_t index, const T& val)
 {
 	// Error checking
 	assert(index <= m_size);
@@ -233,8 +233,8 @@ inline void LinkedList<Value>::Insert(size_t index, const Value& val)
 // Find the value and delete it
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::DeleteByValue(const Value& val)
+template<class T>
+inline void LinkedList<T>::DeleteByValue(const T& val)
 {
 	// Underflow checking
 	assert(m_size > 0);
@@ -255,8 +255,8 @@ inline void LinkedList<Value>::DeleteByValue(const Value& val)
 // Find the node and delete it
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::DeleteByNode(Node* pNode)
+template<class T>
+inline void LinkedList<T>::DeleteByNode(Node* pNode)
 {
 	// Underflow checking
 	assert(m_size > 0);
@@ -277,8 +277,8 @@ inline void LinkedList<Value>::DeleteByNode(Node* pNode)
 // Find index and delete it
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::DeleteByIndex(size_t index)
+template<class T>
+inline void LinkedList<T>::DeleteByIndex(size_t index)
 {
 	// Underflow checking
 	assert(m_size > 0);
@@ -300,31 +300,16 @@ inline void LinkedList<Value>::DeleteByIndex(size_t index)
 // Time:  O(n)
 // Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Reverse(size_t begin/* = 0*/, size_t end/*= std::numeric_limits<size_t>::max()*/)
+template<class T>
+inline void LinkedList<T>::Reverse(size_t begin/* = 0*/, size_t end/*= std::numeric_limits<size_t>::max()*/)
 {
 	assert(begin <= end);
 
 	// Data for relinking after reversing
 	Node* pStart = SearchNodeByIndex(begin);
-	Node* pStartPrev = nullptr;
-	if (begin > 0)
-		pStartPrev = SearchNodeByIndex(begin - 1);
-
-	Node* pEnd = nullptr;
-	if (end == std::numeric_limits<size_t>::max())
-	{
-		end = m_size - 1;
-		pEnd = m_pTail;
-	}
-	else
-	{
-		assert(end < m_size);
-		pEnd = SearchNodeByIndex(end);
-	}
-	Node* pEndNext = nullptr;
-	if (pEnd)
-		pEndNext = pEnd->m_pNext;
+	Node* pStartPrev = (pStart == m_pHead) ? nullptr : SearchNodeByIndex(begin - 1);
+	Node* pEnd = (end == std::numeric_limits<size_t>::max()) ? m_pTail : SearchNodeByIndex(end);
+	Node* pEndNext = pEnd->m_pNext;
 
 	// Data for reversing
 	Node* pCurrent = pStart;
@@ -399,13 +384,13 @@ inline void LinkedList<Value>::Reverse(size_t begin/* = 0*/, size_t end/*= std::
 //--------------------------------------------------------------------------------------------------------------------
 // Sort this list in numeric order
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Sort()
+template<class T>
+inline void LinkedList<T>::Sort()
 {
 }
 
-template<class Value>
-inline void LinkedList<Value>::Print(const char* pPrefix, const char* pSuffix) const
+template<class T>
+inline void LinkedList<T>::Print(const char* pPrefix, const char* pSuffix) const
 {
 	Node* pCurrent = m_pHead;
 
@@ -426,8 +411,8 @@ inline void LinkedList<Value>::Print(const char* pPrefix, const char* pSuffix) c
 //--------------------------------------------------------------------------------------------------------------------
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Clear()
+template<class T>
+inline void LinkedList<T>::Clear()
 {
 	Destroy();
 	m_size = 0;
@@ -437,8 +422,8 @@ inline void LinkedList<Value>::Clear()
 // Pop first element and return it's value
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline Value LinkedList<Value>::PopFront()
+template<class T>
+inline T LinkedList<T>::PopFront()
 {
 	// Underflow checking
 	assert(m_size > 0);
@@ -448,7 +433,7 @@ inline Value LinkedList<Value>::PopFront()
 	m_pHead = pFront->m_pNext;
 
 	// Get return value
-	Value val = pFront->m_value;
+	T val = pFront->m_value;
 
 	// Delete pFront
 	DeleteNode(pFront);
@@ -461,8 +446,8 @@ inline Value LinkedList<Value>::PopFront()
 // Pop last element and return it's value
 // Time: O(1) if doubly linked, O(n) if singly linked
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline Value LinkedList<Value>::PopBack()
+template<class T>
+inline T LinkedList<T>::PopBack()
 {
 	// Underflow checking
 	assert(m_size > 0);
@@ -479,7 +464,7 @@ inline Value LinkedList<Value>::PopBack()
 #endif
 
 	// Get return value
-	Value val = pBack->m_value;
+	T val = pBack->m_value;
 
 	// Delete pBack
 	DeleteNode(pBack);
@@ -495,8 +480,8 @@ inline Value LinkedList<Value>::PopBack()
 //--------------------------------------------------------------------------------------------------------------------
 // Find and return the node with the passed in value, return nullptr if not found
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByValue(const Value& val)
+template<class T>
+inline typename LinkedList<T>::Node* LinkedList<T>::SearchNodeByValue(const T& val)
 {
 	Node* pResult = m_pHead;
 	while (pResult && pResult->m_value != val)
@@ -508,8 +493,8 @@ inline typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByValue(co
 //--------------------------------------------------------------------------------------------------------------------
 // Find and return the node with the passed in node, return nullptr if not found
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByNode(const Node* pNode)
+template<class T>
+inline typename LinkedList<T>::Node* LinkedList<T>::SearchNodeByNode(const Node* pNode)
 {
 	Node* pResult = m_pHead;
 	while (pResult && pResult != pNode)
@@ -522,8 +507,8 @@ inline typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByNode(con
 // Find and return the node with the passed in index, return nullptr if not found
 // Time: O(n), n = index
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline  typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByIndex(size_t index)
+template<class T>
+inline  typename LinkedList<T>::Node* LinkedList<T>::SearchNodeByIndex(size_t index)
 {
 	// Get node on index
 	Node* pNodeToDelete = m_pHead;
@@ -537,8 +522,8 @@ inline  typename LinkedList<Value>::Node* LinkedList<Value>::SearchNodeByIndex(s
 // Takes in a value
 // Find and the node with the passed in value, return a pair of result node and it's previous
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::Node*> LinkedList<Value>::SearchPairByValue(const Value& val)
+template<class T>
+inline std::pair<typename LinkedList<T>::Node*, typename LinkedList<T>::Node*> LinkedList<T>::SearchPairByValue(const T& val)
 {
 	Node* pPrevious = nullptr;
 	Node* pResult = m_pHead;
@@ -557,8 +542,8 @@ inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::
 // Takes in a node pointer
 // Find and the node with the passed in value, return a pair of result node and it's previous
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::Node*> LinkedList<Value>::SearchPairByNode(const Node* pNode)
+template<class T>
+inline std::pair<typename LinkedList<T>::Node*, typename LinkedList<T>::Node*> LinkedList<T>::SearchPairByNode(const Node* pNode)
 {
 	Node* pPrevious = nullptr;
 	Node* pResult = m_pHead;
@@ -577,8 +562,8 @@ inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::
 // Takes in a index
 // Find and the node with the passed in index, return a pair of result node and it's previous
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::Node*> LinkedList<Value>::SearchPairByIndex(size_t index)
+template<class T>
+inline std::pair<typename LinkedList<T>::Node*, typename LinkedList<T>::Node*> LinkedList<T>::SearchPairByIndex(size_t index)
 {
 	Node* pPrevious = nullptr;
 	Node* pResult = m_pHead;
@@ -596,8 +581,8 @@ inline std::pair<typename LinkedList<Value>::Node*, typename LinkedList<Value>::
 // Delete every node in the list
 // Time: O(n)
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Destroy()
+template<class T>
+inline void LinkedList<T>::Destroy()
 {
 	Node* pCurrent = m_pHead;
 
@@ -607,7 +592,7 @@ inline void LinkedList<Value>::Destroy()
 		// Move head to next
 		m_pHead = m_pHead->m_pNext;
 
-		if constexpr (!std::is_trivially_destructible_v<Value>)
+		if constexpr (!std::is_trivially_destructible_v<T>)
 			pCurrent->m_pNext.~T();
 
 		// Delete current
@@ -621,8 +606,8 @@ inline void LinkedList<Value>::Destroy()
 //--------------------------------------------------------------------------------------------------------------------
 // Set head and tail to nullptr if the list is empty
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::SetNullptrIfEmpty()
+template<class T>
+inline void LinkedList<T>::SetNullptrIfEmpty()
 {
 	if (m_size <= 0)
 	{
@@ -634,8 +619,8 @@ inline void LinkedList<Value>::SetNullptrIfEmpty()
 //--------------------------------------------------------------------------------------------------------------------
 // Internally delete a node
 //--------------------------------------------------------------------------------------------------------------------
-template<class Value>
-inline void LinkedList<Value>::Delete(Node* pNodeToDelete, Node* pPrevious)
+template<class T>
+inline void LinkedList<T>::Delete(Node* pNodeToDelete, Node* pPrevious)
 {
 	// If data is in the list, delete it
 	if (pNodeToDelete)
@@ -670,8 +655,8 @@ inline void LinkedList<Value>::Delete(Node* pNodeToDelete, Node* pPrevious)
 	}
 }
 
-template<class Value>
-inline void LinkedList<Value>::DeleteNode(Node* pNodeToDelete)
+template<class T>
+inline void LinkedList<T>::DeleteNode(Node* pNodeToDelete)
 {
 	pNodeToDelete->ClearPointers();
 	delete pNodeToDelete;
@@ -684,8 +669,8 @@ inline void LinkedList<Value>::DeleteNode(Node* pNodeToDelete)
 	SetNullptrIfEmpty();
 }
 
-template<class Value>
-inline void LinkedList<Value>::AssignNodeAtIndex(size_t index, Node* pNode)
+template<class T>
+inline void LinkedList<T>::AssignNodeAtIndex(size_t index, Node* pNode)
 {
 	Node* pSearchNode = m_pHead;
 	for (size_t i = 0; i < index; ++i)
@@ -693,22 +678,22 @@ inline void LinkedList<Value>::AssignNodeAtIndex(size_t index, Node* pNode)
 	pSearchNode = pNode;
 }
 
-template<class Value>
-inline void LinkedList<Value>::Test()
+template<class T>
+inline void LinkedList<T>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	Value value = 0;		// Be used as value
+	T value = 0;		// Be used as value
 
 	// Create list
-	LinkedList<Value> list;
+	LinkedList<T> list;
 
 #if _DEBUG
-	list.PushBack(static_cast<Value>(13));
-	list.PushBack(static_cast<Value>(19));
-	list.PushBack(static_cast<Value>(24));
-	list.PushBack(static_cast<Value>(39));
+	list.PushBack(static_cast<T>(13));
+	list.PushBack(static_cast<T>(19));
+	list.PushBack(static_cast<T>(24));
+	list.PushBack(static_cast<T>(39));
 #endif
 
 	// Loop work
