@@ -2,6 +2,7 @@
 
 #include "UnorderedArray.h"
 
+
 //--------------------------------------------------------------------------------------------------------------------
 // Stack implemented by UnorderedArray
 //--------------------------------------------------------------------------------------------------------------------
@@ -10,7 +11,6 @@ class StackArray
 {
 private:
 	UnorderedArray<T> m_unorderedArray;
-	// Top in stack is trivial, it's just m_unorderedArray[size-1]
 
 public:
 	StackArray();
@@ -146,3 +146,4 @@ inline void StackArray<T>::Test()
 		system("cls");
 	}
 }
+

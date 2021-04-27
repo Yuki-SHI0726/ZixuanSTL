@@ -12,6 +12,7 @@
 #include <optional>
 #include <utility>
 
+
 // Pivot choosing macro for quicksort
 // 0 = randomized
 // 1 = median of three
@@ -31,11 +32,15 @@ private:
     size_t m_size;     // was m_numElements
 
 public:
-    UnorderedArray(size_t capacity);
-    UnorderedArray();
+    UnorderedArray(size_t capacity = kInitialCapacity);
+    UnorderedArray(const UnorderedArray& other);
+    UnorderedArray(UnorderedArray&& other) noexcept;
+    UnorderedArray& operator=(const UnorderedArray& other);
+    UnorderedArray& operator=(UnorderedArray&& other) noexcept;
     ~UnorderedArray();
 
     // API
+    // Modifiers
     void Clear();
     void PushBack(const T& val);
     void PushBack(T&& val);
@@ -44,10 +49,14 @@ public:
     T PopBack();
     T PopFront();
     void Erase(size_t index);
+    
+    // Getters
     const T& operator[](size_t index) const;
     T& operator[](size_t index);
-    void Print() const;
     std::optional<size_t> Search(const T& val) const;
+
+    // Utils
+    void Print() const;
 
     // Sorting algorithms
     void BubbleSort();
@@ -79,25 +88,120 @@ private:
 // Ctor, takes in the size of the array and dynamically allocate in the ctor
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
-inline UnorderedArray<T>::UnorderedArray(size_t capacity)
+inline UnorderedArray<T>::UnorderedArray(size_t capacity /*= kInitialCapacity*/)
     : m_pBuffer(nullptr)
-    , m_capacity(0)
+    , m_capacity(capacity)
     , m_size(0)
 {
-    assert(capacity >= 0);
-    Expand(capacity);
+    assert(m_capacity >= 0);
+    Expand(m_capacity);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
-// Default ctor
+// Copy ctor
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
-inline UnorderedArray<T>::UnorderedArray()
+inline UnorderedArray<T>::UnorderedArray(const UnorderedArray& other)
     : m_pBuffer(nullptr)
-    , m_capacity(kInitialCapacity)
-    , m_size(0)
+    , m_capacity(other.m_capacity)
+    , m_size(other.m_size)
 {
-    Expand(m_capacity);
+    // If the other's buffer exists
+    if (other.m_pBuffer)
+    {
+        // Allocate new memory for buffer
+        m_pBuffer = new std::byte[m_capacity * sizeof(T)];
+
+        // Copy everything over
+        T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+        T* pOtherTypeArray = reinterpret_cast<T*>(other.m_pBuffer);
+        for (size_t i = 0; i < m_size; ++i)
+            new(pTypeArray + i) T(pOtherTypeArray[i]);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Move ctor
+//--------------------------------------------------------------------------------------------------------------------
+template<class T>
+inline UnorderedArray<T>::UnorderedArray(UnorderedArray&& other) noexcept
+    : m_pBuffer(nullptr)
+    , m_capacity(other.m_capacity)
+    , m_size(other.m_size)
+{
+    // If other's buffer exists
+    if (other.m_pBuffer)
+    {
+        // Allocate a new buffer
+        m_pBuffer = new std::byte[m_capacity * sizeof(T)];
+
+        // Move everything over
+        T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+        T* pOtherTypeArray = reinterpret_cast<T*>(other.m_pBuffer);
+        for (size_t i = 0; i < m_size; ++i)
+            new(pTypeArray + i) T(std::move(pOtherTypeArray[i]));
+
+        // Destroy the other's stuff
+        other.Clear();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Move ctor
+//--------------------------------------------------------------------------------------------------------------------
+template<class T>
+inline UnorderedArray<T>& UnorderedArray<T>::operator=(const UnorderedArray& other)
+{
+    // Edge-case checking
+    if (this == &other)
+        return *this;
+
+    // Clean old buffer
+    delete[] m_pBuffer;
+    m_pBuffer = nullptr;
+
+    // Copy everything over
+    m_size = other.m_size;
+    m_capacity = other.m_capacity;
+
+    // If the other's buffer exists
+    if (other.m_pBuffer)
+    {
+        // Allocate new memory for buffer
+        m_pBuffer = new std::byte[m_capacity * sizeof(T)];
+
+        // Copy everything over
+        T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
+        T* pOtherTypeArray = reinterpret_cast<T*>(other.m_pBuffer);
+        for (size_t i = 0; i < m_size; ++i)
+            new(pTypeArray + i) T(pOtherTypeArray[i]);
+    }
+
+    return (*this);
+}
+
+template<class T>
+inline UnorderedArray<T>& UnorderedArray<T>::operator=(UnorderedArray&& other) noexcept
+{
+    // Edge-case checking
+    if (this == &other)
+        return *this;
+
+    // Clean old buffer
+    delete[] m_pBuffer;
+    m_pBuffer = nullptr;
+
+    // Move everything over
+    m_size = other.m_size;
+    m_capacity = other.m_capacity;
+    m_pBuffer = other.m_pBuffer;
+
+    // Clear the other
+    other.m_size = 0;
+    other.m_capacity = 0;
+    other.m_pBuffer = nullptr;
+
+    return (*this);
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -211,7 +315,7 @@ inline T UnorderedArray<T>::PopFront()
 template<class T>
 inline void UnorderedArray<T>::Erase(size_t index)
 {
-    assert(index >= 0 && index < m_size && !Empty());
+    assert(index < m_size && !Empty());
 
     // Create TypeArray
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
@@ -233,7 +337,7 @@ inline void UnorderedArray<T>::Erase(size_t index)
 template<class T>
 inline const T& UnorderedArray<T>::operator[](size_t index) const
 {
-    assert(index >= 0 && index < m_size && !Empty());
+    assert(index < m_size && !Empty());
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
     return pTypeArray[index];
 }
@@ -244,7 +348,7 @@ inline const T& UnorderedArray<T>::operator[](size_t index) const
 template<class T>
 inline T& UnorderedArray<T>::operator[](size_t index)
 {
-    assert(index >= 0 && index < m_size && !Empty());
+    assert(index < m_size && !Empty());
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
     return pTypeArray[index];
 }
@@ -284,7 +388,6 @@ inline std::optional<size_t> UnorderedArray<T>::Search(const T& val) const
 template<class T>
 inline void UnorderedArray<T>::BubbleSort()
 {
-    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through the array from back to begin, this is the unsorted part
@@ -306,7 +409,6 @@ inline void UnorderedArray<T>::BubbleSort()
 template<class T>
 inline void UnorderedArray<T>::SelectionSort()
 {
-    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through the array
@@ -320,7 +422,7 @@ inline void UnorderedArray<T>::SelectionSort()
         {
             // If current element is less than current min element, update min to current index
             if (pTypeArray[unsortedIndex] < pTypeArray[minIndex])
-                minIndex = unsortedIndex;   
+                minIndex = unsortedIndex;
         }
 
         // If min indexed element is less than current element
@@ -335,7 +437,6 @@ inline void UnorderedArray<T>::SelectionSort()
 template<class T>
 inline void UnorderedArray<T>::InsertionSort()
 {
-    static_assert(std::is_arithmetic_v<T>, "Template parameter must be an arithmetic type");
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
     // Loop through array from index 1
@@ -346,7 +447,7 @@ inline void UnorderedArray<T>::InsertionSort()
 
         // Get an index for iterating through the sorted part of the array
         size_t sortedIndex = keyIndex - 1;
-         
+
         // While we need to move key to left
         while (sortedIndex >= 0 && pTypeArray[sortedIndex] > key)
         {
@@ -483,11 +584,10 @@ template<class T>
 inline void UnorderedArray<T>::Expand(size_t newCapacity)
 {
     const size_t newBufferSize = newCapacity * sizeof(T);
-
     std::byte* pNewBuffer = new std::byte[newBufferSize];
 
     // if the current buffer has data, copy it over to our new buffer and deallocate
-    if (m_capacity > 0)
+    if (m_size > 0)
     {
         std::memcpy(pNewBuffer, m_pBuffer, sizeof(T) * m_size);
         delete[] m_pBuffer;
@@ -509,17 +609,11 @@ inline void UnorderedArray<T>::Destroy()
     {
         T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
         for (size_t i = 0; i < m_size; ++i)
-        {
             pTypeArray[i].~T();
-        }
     }
 
-    // If m_pArray is not nullptr, deallocate it and set it to nullptr
-    if (m_pBuffer)
-    {
-        delete[] m_pBuffer;
-        m_pBuffer = nullptr;
-    }
+    delete[] m_pBuffer;
+    m_pBuffer = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -607,3 +701,4 @@ inline size_t UnorderedArray<T>::GetMidIndex(size_t start, size_t end) const
     }
 }
 #endif
+
