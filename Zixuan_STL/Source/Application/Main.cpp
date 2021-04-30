@@ -70,14 +70,10 @@ int main()
 	//	shouldQuit = Run();
 	//}
 
-	UnorderedArray<Actor<int, int>> unorderedArray;
-	unorderedArray.EmplaceBack();
-	unorderedArray.EmplaceBack();
-	unorderedArray.EmplaceBack();
-	unorderedArray.EmplaceBack();
-	UnorderedArray<Actor<int, int>> otherUnorderedArray;
-	otherUnorderedArray = std::move(unorderedArray);
-	otherUnorderedArray.Print();
+	Graph<char> graph;
+	graph.BuildDirectedWeightedGraph();
+	graph.RunDijkstraSearch(1, [](size_t index, char data) {});
+	graph.PrintShortestPath(3);
 
 	return 0;
 }

@@ -99,6 +99,8 @@ inline UnorderedArray<T>::UnorderedArray(size_t capacity /*= kInitialCapacity*/)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Copy ctor
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline UnorderedArray<T>::UnorderedArray(const UnorderedArray& other)
@@ -122,32 +124,24 @@ inline UnorderedArray<T>::UnorderedArray(const UnorderedArray& other)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Move ctor
+// Time:  O(1)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline UnorderedArray<T>::UnorderedArray(UnorderedArray&& other) noexcept
-    : m_pBuffer(nullptr)
+    : m_pBuffer(other.m_pBuffer)
     , m_capacity(other.m_capacity)
     , m_size(other.m_size)
 {
-    // If other's buffer exists
-    if (other.m_pBuffer)
-    {
-        // Allocate a new buffer
-        m_pBuffer = new std::byte[m_capacity * sizeof(T)];
-
-        // Move everything over
-        T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
-        T* pOtherTypeArray = reinterpret_cast<T*>(other.m_pBuffer);
-        for (size_t i = 0; i < m_size; ++i)
-            new(pTypeArray + i) T(std::move(pOtherTypeArray[i]));
-
-        // Destroy the other's stuff
-        other.Clear();
-    }
+    other.m_size = 0;
+    other.m_capacity = 0;
+    other.m_pBuffer = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Move ctor
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline UnorderedArray<T>& UnorderedArray<T>::operator=(const UnorderedArray& other)
@@ -158,11 +152,12 @@ inline UnorderedArray<T>& UnorderedArray<T>::operator=(const UnorderedArray& oth
 
     // Clean old buffer
     delete[] m_pBuffer;
-    m_pBuffer = nullptr;
+    m_pBuffer = other.m_pBuffer;
 
     // Copy everything over
     m_size = other.m_size;
     m_capacity = other.m_capacity;
+    other.m_pBuffer = nullptr;
 
     // If the other's buffer exists
     if (other.m_pBuffer)
@@ -180,6 +175,11 @@ inline UnorderedArray<T>& UnorderedArray<T>::operator=(const UnorderedArray& oth
     return (*this);
 }
 
+//--------------------------------------------------------------------------------------------------------------------
+// Move ctor
+// Time:  O(1)
+// Space: O(1)
+//--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline UnorderedArray<T>& UnorderedArray<T>::operator=(UnorderedArray&& other) noexcept
 {
@@ -355,19 +355,23 @@ inline T& UnorderedArray<T>::operator[](size_t index)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Print out every element
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::Print() const
 {
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
-    std::cout << "Elements: { ";
+    std::cout << "Elements: { \n";
     for (size_t i = 0; i < m_size; ++i)
-        std::cout << pTypeArray[i] << ", ";
+        std::cout << pTypeArray[i] << "\n";
     std::cout << "} " << std::endl;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Linear search
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline std::optional<size_t> UnorderedArray<T>::Search(const T& val) const
@@ -384,6 +388,8 @@ inline std::optional<size_t> UnorderedArray<T>::Search(const T& val) const
 
 //--------------------------------------------------------------------------------------------------------------------
 // Bubble Sort implementation
+// Time:  O(n ^ 2)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::BubbleSort()
@@ -405,6 +411,8 @@ inline void UnorderedArray<T>::BubbleSort()
 
 //--------------------------------------------------------------------------------------------------------------------
 // Selection Sort implementation
+// Time:  O(n ^ 2)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::SelectionSort()
@@ -433,6 +441,8 @@ inline void UnorderedArray<T>::SelectionSort()
 
 //--------------------------------------------------------------------------------------------------------------------
 // Insertion Sort implementation
+// Time:  O(n ^ 2)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::InsertionSort()
@@ -463,6 +473,8 @@ inline void UnorderedArray<T>::InsertionSort()
 
 //--------------------------------------------------------------------------------------------------------------------
 // Public Quick-sort interface
+// Time:  O(nlog(n))
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::QuickSort()
@@ -472,6 +484,8 @@ inline void UnorderedArray<T>::QuickSort()
 
 //--------------------------------------------------------------------------------------------------------------------
 // Quick Sort implementation
+// Time:  O(nlog(n))
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::QuickSort(size_t start, size_t end)
@@ -486,6 +500,8 @@ inline void UnorderedArray<T>::QuickSort(size_t start, size_t end)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Randomly rearranges elements in the array
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::Shuffle()
@@ -600,6 +616,8 @@ inline void UnorderedArray<T>::Expand(size_t newCapacity)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Delete pArray and set it to nullptr
+// Time:  O(1)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class T>
 inline void UnorderedArray<T>::Destroy()
@@ -630,7 +648,7 @@ inline size_t UnorderedArray<T>::Partition(size_t start, size_t end)
     T* pTypeArray = reinterpret_cast<T*>(m_pBuffer);
 
 #if (PIVOT_PICK == 0)    // Randomized element
-    // chose a random index from the array 
+    // choose a random index from the array 
     // replace the element at that index with the element at the last index of the array.
     std::swap(pTypeArray[start + (rand() % (end - start))], pTypeArray[end]);
 
@@ -642,7 +660,7 @@ inline size_t UnorderedArray<T>::Partition(size_t start, size_t end)
 #endif
 
     T pivot = pTypeArray[end];    // Pivot element value
-    size_t i = start - 1;       // i is the last element's index of region 1, which is less than the pivot
+    size_t i = start - 1;         // i is the last element's index of region 1, which is less than the pivot
 
     // j is the current processing element's index
     for (size_t j = start; j < end; ++j)

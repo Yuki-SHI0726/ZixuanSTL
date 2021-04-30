@@ -18,8 +18,8 @@ class OrderedArray
 private:
     std::byte* m_pBuffer;
 
-    size_t m_capacity; // was m_maxSize  
-    size_t m_size;     // was m_numElements
+    size_t m_capacity;
+    size_t m_size;     
     bool m_isIncreasingOrder;   // Used for ordering decreasing or increasing
 
 public:

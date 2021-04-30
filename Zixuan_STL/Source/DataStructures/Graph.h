@@ -314,7 +314,7 @@ inline constexpr bool Graph<Type>::BreadthFirstSearchFind(NodeId startNodeId, No
 }
 
 //--------------------------------------------------------------------------------------------------------------------
-// Recursively print shortest path
+// Recursively print shortest path to the target node
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
 inline constexpr void Graph<Type>::PrintShortestPath(NodeId nodeId)
@@ -722,7 +722,11 @@ inline constexpr void Graph<Type>::RunDijkstraSearch(NodeId startNodeId, Func&& 
 	// The lambda that priority queue is using
 	auto openSetPriorityFunc = [this](NodeId left, NodeId right) -> bool
 	{
+#if PATH_CHOICE == 1
 		return m_vertices[left].m_distance > m_vertices[right].m_distance;
+#elif PATH_CHOICE == 2
+		return m_vertices[left].m_distance < m_vertices[right].m_distance;
+#endif
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
@@ -782,7 +786,11 @@ inline constexpr std::vector<typename Graph<Type>::NodeId> Graph<Type>::RunDijks
 	// The lambda that priority queue is using
 	auto openSetPriorityFunc = [this](NodeId left, NodeId right) -> bool
 	{
+#if PATH_CHOICE == 1
 		return m_vertices[left].m_distance > m_vertices[right].m_distance;
+#elif PATH_CHOICE == 2
+		return m_vertices[left].m_distance < m_vertices[right].m_distance;
+#endif
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
@@ -853,7 +861,11 @@ inline constexpr void Graph<Type>::AStar(NodeId startNodeId, NodeId destNodeId, 
 	// The lambda that priority queue is using
 	auto openSetPriorityFunc = [this](NodeId left, NodeId right) -> bool
 	{
+#if PATH_CHOICE == 1
 		return m_vertices[left].m_distance > m_vertices[right].m_distance;
+#elif PATH_CHOICE == 2
+		return m_vertices[left].m_distance < m_vertices[right].m_distance;
+#endif
 	};
 
 	// Declare the open set, which is all the nodes we have yet to expand.
