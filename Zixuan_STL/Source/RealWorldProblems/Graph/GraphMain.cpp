@@ -1,7 +1,7 @@
 #include "FindTile/FindTileWorld.h"
 #include <iostream>
 
-int grap()
+int graph()
 {
 	FindTileWorld world;
 	world.Init();

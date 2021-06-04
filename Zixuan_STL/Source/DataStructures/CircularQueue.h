@@ -7,11 +7,11 @@
 // CircularQueue with a fixed size array.
 // Will wrap around by overriding elements which are already at the front of the queue when full 
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
+template<class Type>
 class CircularQueue
 {
 private:
-	T* m_pCircularQueue;
+	Type* m_pCircularQueue;
 
 	size_t m_capacity; // was m_maxSize  
 	size_t m_size;     // was m_numElements
@@ -26,12 +26,12 @@ public:
 	~CircularQueue();
 
 	// API
-	void Enqueue(const T& val);
-	T& Dequeue();
+	void Enqueue(const Type& val);
+	Type& Dequeue();
 	void Print() const;
 	void Clear();
-	T& Rear() const;
-	T& Front() const;
+	Type& Rear() const;
+	Type& Front() const;
 	bool Empty() const { return m_size <= 0; }
 	size_t GetSize() const { return m_size; }
 	size_t GetCapacity() const { return m_capacity; }
@@ -43,30 +43,30 @@ private:
 	void Destroy();
 };
 
-template<class T>
-inline CircularQueue<T>::CircularQueue()
+template<class Type>
+inline CircularQueue<Type>::CircularQueue()
 	: m_pCircularQueue{ nullptr }
 	, m_capacity{ kInitialCapacity }
 	, m_size{ 0 }
 	, m_frontIndex{ 0 }
 	, m_rearIndex{ 0 }
 {
-	m_pCircularQueue = new T[kInitialCapacity];
+	m_pCircularQueue = new Type[kInitialCapacity];
 }
 
-template<class T>
-inline CircularQueue<T>::CircularQueue(size_t capacity)
+template<class Type>
+inline CircularQueue<Type>::CircularQueue(size_t capacity)
 	: m_pCircularQueue(nullptr)
 	, m_capacity(capacity)
 	, m_size(0)
 	, m_frontIndex{ 0 }
 	, m_rearIndex{ 0 }
 {
-	m_pCircularQueue = new T[m_capacity];
+	m_pCircularQueue = new Type[m_capacity];
 }
 
-template<class T>
-inline CircularQueue<T>::~CircularQueue()
+template<class Type>
+inline CircularQueue<Type>::~CircularQueue()
 {
 	Destroy();
 }
@@ -74,8 +74,8 @@ inline CircularQueue<T>::~CircularQueue()
 //--------------------------------------------------------------------------------------------------------------------
 // Will wrap around by overriding elements which are already at the front of the queue when full 
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline void CircularQueue<T>::Enqueue(const T& val)
+template<class Type>
+inline void CircularQueue<Type>::Enqueue(const Type& val)
 {
 	// We have two condition here
 	// 1. The queue is full, we need to overwrite the head, move head and tail one spot forward, and don't increment size
@@ -86,7 +86,7 @@ inline void CircularQueue<T>::Enqueue(const T& val)
 	if (m_size >= m_capacity)
 	{
 		// Clean what's already in the tail index
-		if constexpr (!std::is_trivially_destructible_v<T>)
+		if constexpr (!std::is_trivially_destructible_v<Type>)
 			m_pCircularQueue[m_rearIndex].~T();
 
 		// Move head index forward
@@ -113,18 +113,18 @@ inline void CircularQueue<T>::Enqueue(const T& val)
 		m_rearIndex = 0;
 }
 
-template<class T>
-inline T& CircularQueue<T>::Dequeue()
+template<class Type>
+inline Type& CircularQueue<Type>::Dequeue()
 {
 	// Underflow checking
 	// If Queue.head = Queue.tail, and there is no value in there, Queue overflow
 	assert(m_size > 0);
 
 	// Get return value
-	T& pVal = m_pCircularQueue[m_frontIndex];
+	Type& pVal = m_pCircularQueue[m_frontIndex];
 
 	// If the element is not trivially destructible, call it's destructor
-	if constexpr (!std::is_trivially_destructible_v<T>)
+	if constexpr (!std::is_trivially_destructible_v<Type>)
 		m_pCircularQueue[m_frontIndex].~T();
 
 	// Increment head
@@ -140,8 +140,8 @@ inline T& CircularQueue<T>::Dequeue()
 	return pVal;
 }
 
-template<class T>
-inline void CircularQueue<T>::Print() const
+template<class Type>
+inline void CircularQueue<Type>::Print() const
 {
 	std::cout << "Queue: { ";
 
@@ -158,51 +158,51 @@ inline void CircularQueue<T>::Print() const
 	std::cout << "} " << std::endl;
 }
 
-template<class T>
-inline void CircularQueue<T>::Clear()
+template<class Type>
+inline void CircularQueue<Type>::Clear()
 {
-	std::memset(m_pCircularQueue, 0, sizeof(T) * m_size);
+	std::memset(m_pCircularQueue, 0, sizeof(Type) * m_size);
 	m_frontIndex = 0;
 	m_rearIndex = 0;
 	m_size = 0;
 }
 
-template<class T>
-inline T& CircularQueue<T>::Rear() const
+template<class Type>
+inline Type& CircularQueue<Type>::Rear() const
 {
 	assert(m_size > 0);
 	return m_pCircularQueue[(m_rearIndex == 0) ? (m_capacity - 1) : (m_rearIndex - 1)];
 }
 
-template<class T>
-inline T& CircularQueue<T>::Front() const
+template<class Type>
+inline Type& CircularQueue<Type>::Front() const
 {
 	assert(m_size > 0);
 	return m_pCircularQueue[m_frontIndex];
 }
 
-template<class T>
-inline void CircularQueue<T>::Test()
+template<class Type>
+inline void CircularQueue<Type>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	T value = 0;		// Be used value
+	Type value = 0;		// Be used value
 
 	// I'm tired typing in initial size and elements to test sorting algorithms
 #if _DEBUG
 	// Create queue
-	CircularQueue<T> circularQueue{ kInitialCapacity };
-	circularQueue.Enqueue(static_cast<T>(0));
-	circularQueue.Enqueue(static_cast<T>(1));
-	circularQueue.Enqueue(static_cast<T>(2));
-	circularQueue.Enqueue(static_cast<T>(3));
-	circularQueue.Enqueue(static_cast<T>(4));
-	circularQueue.Enqueue(static_cast<T>(5));
-	circularQueue.Enqueue(static_cast<T>(6));
-	circularQueue.Enqueue(static_cast<T>(7));
-	circularQueue.Enqueue(static_cast<T>(8));
-	circularQueue.Enqueue(static_cast<T>(9));
+	CircularQueue<Type> circularQueue{ kInitialCapacity };
+	circularQueue.Enqueue(static_cast<Type>(0));
+	circularQueue.Enqueue(static_cast<Type>(1));
+	circularQueue.Enqueue(static_cast<Type>(2));
+	circularQueue.Enqueue(static_cast<Type>(3));
+	circularQueue.Enqueue(static_cast<Type>(4));
+	circularQueue.Enqueue(static_cast<Type>(5));
+	circularQueue.Enqueue(static_cast<Type>(6));
+	circularQueue.Enqueue(static_cast<Type>(7));
+	circularQueue.Enqueue(static_cast<Type>(8));
+	circularQueue.Enqueue(static_cast<Type>(9));
 
 #else
 		// Get capacity from user
@@ -259,11 +259,11 @@ inline void CircularQueue<T>::Test()
 	}
 }
 
-template<class T>
-inline void CircularQueue<T>::Destroy()
+template<class Type>
+inline void CircularQueue<Type>::Destroy()
 {
 	// If the type of elements is not trivially destructible, call it's destructor
-	if constexpr (!std::is_trivially_destructible_v<T>)
+	if constexpr (!std::is_trivially_destructible_v<Type>)
 	{
 		// Tracking current index to destroy
 		size_t current = m_frontIndex;

@@ -7,11 +7,11 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Queue implemented by T array
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
+template<class Type>
 class QueueArray
 {
 private:
-	T* m_pQueue;
+	Type* m_pQueue;
 
 	size_t m_capacity; // was m_maxSize  
 	size_t m_size;     // was m_numElements
@@ -25,12 +25,12 @@ public:
 	QueueArray(size_t capacity);
 	~QueueArray();
 
-	void Enqueue(const T& val);
-	T& Dequeue();
+	void Enqueue(const Type& val);
+	Type& Dequeue();
 	void Print() const;
 	void Clear();
-	T& Tail() const;
-	T& Head() const;
+	Type& Tail() const;
+	Type& Head() const;
 	bool Empty() const { return m_size <= 0; }
 	size_t GetSize() const { return m_size; }
 	size_t GetCapacity() const { return m_capacity; }
@@ -42,39 +42,39 @@ private:
 	void Destroy();
 };
 
-template<class T>
-inline QueueArray<T>::QueueArray()
+template<class Type>
+inline QueueArray<Type>::QueueArray()
 	: m_pQueue(nullptr)
 	, m_capacity(kInitialCapacity)
 	, m_size(0)
 	, m_headIndex{ 0 }
 	, m_tailIndex{ 0 }
 {
-	m_pQueue = new T[kInitialCapacity];
+	m_pQueue = new Type[kInitialCapacity];
 }
 
-template<class T>
-inline QueueArray<T>::QueueArray(size_t capacity)
+template<class Type>
+inline QueueArray<Type>::QueueArray(size_t capacity)
 	: m_pQueue(nullptr)
 	, m_capacity(capacity)
 	, m_size(0)
 	, m_headIndex{ 0 }
 	, m_tailIndex{ 0 }
 {
-	m_pQueue = new T[m_capacity];
+	m_pQueue = new Type[m_capacity];
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Default ctor
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline QueueArray<T>::~QueueArray()
+template<class Type>
+inline QueueArray<Type>::~QueueArray()
 {
 	Destroy();
 }
 
-template<class T>
-inline void QueueArray<T>::Enqueue(const T& val)
+template<class Type>
+inline void QueueArray<Type>::Enqueue(const Type& val)
 {
 	// Overflow checking
 	// If size is equal to the capacity, it's full
@@ -94,18 +94,18 @@ inline void QueueArray<T>::Enqueue(const T& val)
 	++m_size;
 }
 
-template<class T>
-inline T& QueueArray<T>::Dequeue()
+template<class Type>
+inline Type& QueueArray<Type>::Dequeue()
 {
 	// Underflow checking
 	// If size is less than 0, it's empty
 	assert(m_size > 0);
 
 	// Get return value
-	T& pVal = m_pQueue[m_headIndex];
+	Type& pVal = m_pQueue[m_headIndex];
 
 	// If the element is not trivially destructible, call it's destructor
-	if constexpr (!std::is_trivially_destructible_v<T>)
+	if constexpr (!std::is_trivially_destructible_v<Type>)
 		m_pQueue[m_headIndex].~T();
 
 	// Increment head
@@ -121,8 +121,8 @@ inline T& QueueArray<T>::Dequeue()
 	return pVal;
 }
 
-template<class T>
-inline void QueueArray<T>::Print() const
+template<class Type>
+inline void QueueArray<Type>::Print() const
 {
 	std::cout << "Queue: { ";
 
@@ -139,43 +139,43 @@ inline void QueueArray<T>::Print() const
 	std::cout << "} " << std::endl;
 }
 
-template<class T>
-inline void QueueArray<T>::Clear()
+template<class Type>
+inline void QueueArray<Type>::Clear()
 {
-	std::memset(m_pQueue, 0, sizeof(T) * m_size);
+	std::memset(m_pQueue, 0, sizeof(Type) * m_size);
 	m_headIndex = 0;
 	m_tailIndex = 0;
 	m_size = 0;
 }
 
-template<class T>
-inline T& QueueArray<T>::Tail() const
+template<class Type>
+inline Type& QueueArray<Type>::Tail() const
 {
 	assert(m_size > 0);
 	return m_pQueue[(m_tailIndex == 0) ? (m_capacity - 1) : (m_tailIndex - 1)];
 }
 
-template<class T>
-inline T& QueueArray<T>::Head() const
+template<class Type>
+inline Type& QueueArray<Type>::Head() const
 {
 	assert(m_size > 0);
 	return m_pQueue[m_headIndex];
 }
 
-template<class T>
-inline void QueueArray<T>::Test()
+template<class Type>
+inline void QueueArray<Type>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	T value = 0;		// Be used value
+	Type value = 0;		// Be used value
 
 	// I'm tired typing in initial size and elements to test sorting algorithms
 #if _DEBUG
 	// Create queue
-	QueueArray<T> queueArray{ kInitialCapacity };
-	queueArray.Enqueue(static_cast<T>(13));
-	queueArray.Enqueue(static_cast<T>(19));
+	QueueArray<Type> queueArray{ kInitialCapacity };
+	queueArray.Enqueue(static_cast<Type>(13));
+	queueArray.Enqueue(static_cast<Type>(19));
 
 #else
 		// Get capacity from user
@@ -235,11 +235,11 @@ inline void QueueArray<T>::Test()
 //--------------------------------------------------------------------------------------------------------------------
 // Delete pArray and set it to nullptr
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline void QueueArray<T>::Destroy()
+template<class Type>
+inline void QueueArray<Type>::Destroy()
 {
 	// If the type of elements is not trivially destructible, call it's destructor
-	if constexpr (!std::is_trivially_destructible_v<T>)
+	if constexpr (!std::is_trivially_destructible_v<Type>)
 	{
 		// Tracking current index to destroy
 		size_t current = m_headIndex;

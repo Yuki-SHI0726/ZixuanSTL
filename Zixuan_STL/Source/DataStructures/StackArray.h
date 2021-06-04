@@ -6,22 +6,22 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Stack implemented by UnorderedArray
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
+template<class Type>
 class StackArray
 {
 private:
-	UnorderedArray<T> m_unorderedArray;
+	UnorderedArray<Type> m_unorderedArray;
 
 public:
 	StackArray();
 	StackArray(size_t capacity);
 
-	void Push(const T& val);
+	void Push(const Type& val);
 	void Print() const;
 	void Clear();
-	T Pop();
-	T& Top();
-	const T& Top() const;
+	Type Pop();
+	Type& Top();
+	const Type& Top() const;
 	bool Empty() const { return m_unorderedArray.Empty(); }
 	size_t GetSize() const { return m_unorderedArray.GetSize(); }
 	size_t GetCapacity() const { return m_unorderedArray.GetCapacity(); }
@@ -30,72 +30,72 @@ public:
 	static void Test();
 };
 
-template<class T>
-inline StackArray<T>::StackArray()
+template<class Type>
+inline StackArray<Type>::StackArray()
 	: m_unorderedArray{ kInitialCapacity }
 {
 }
 
-template<class T>
-inline StackArray<T>::StackArray(size_t capacity)
+template<class Type>
+inline StackArray<Type>::StackArray(size_t capacity)
 	: m_unorderedArray{ capacity }
 {
 }
 
-template<class T>
-inline void StackArray<T>::Push(const T& val)
+template<class Type>
+inline void StackArray<Type>::Push(const Type& val)
 {
 	assert(m_unorderedArray.GetSize() < kInitialCapacity && "Error: Stack Overflow!");
 	m_unorderedArray.PushBack(val);
 }
 
-template<class T>
-inline void StackArray<T>::Print() const
+template<class Type>
+inline void StackArray<Type>::Print() const
 {
 	m_unorderedArray.Print();
 }
 
-template<class T>
-inline void StackArray<T>::Clear()
+template<class Type>
+inline void StackArray<Type>::Clear()
 {
 	m_unorderedArray.Clear();
 }
 
-template<class T>
-inline T StackArray<T>::Pop()
+template<class Type>
+inline Type StackArray<Type>::Pop()
 {
 	assert(!Empty() && "Error: Stack Underflow!");
 	return m_unorderedArray.PopBack();
 }
 
-template<class T>
-inline T& StackArray<T>::Top()
+template<class Type>
+inline Type& StackArray<Type>::Top()
 {
 	assert(!Empty() && "Error: Stack has no element!");
 	return m_unorderedArray[m_unorderedArray.GetSize() - 1];
 }
 
-template<class T>
-inline const T& StackArray<T>::Top() const
+template<class Type>
+inline const Type& StackArray<Type>::Top() const
 {
 	assert(!Empty() && "Error: Stack has no element!");
 	return m_unorderedArray[m_unorderedArray.GetSize() - 1];
 }
 
-template<class T>
-inline void StackArray<T>::Test()
+template<class Type>
+inline void StackArray<Type>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	T value = 0;		// Be used as value
+	Type value = 0;		// Be used as value
 
 	// I'm tired typing in initial size and elements to test sorting algorithms
 #if _DEBUG
 	// Create stack
-	StackArray<T> stackArray{ kInitialCapacity };
-	stackArray.Push(static_cast<T>(76));
-	stackArray.Push(static_cast<T>(68));
+	StackArray<Type> stackArray{ kInitialCapacity };
+	stackArray.Push(static_cast<Type>(76));
+	stackArray.Push(static_cast<Type>(68));
 
 #else
 		// Get capacity from user

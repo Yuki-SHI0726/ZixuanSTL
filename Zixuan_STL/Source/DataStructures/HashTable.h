@@ -7,10 +7,10 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Custom templated chained hash table implementation
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
+template<typename Key, typename Type>
 class HashTable
 {
-	using Table = std::pair<size_t, LinkedList<T>*>;
+	using Table = std::pair<size_t, LinkedList<Type>*>;
 
 private:
 	Table* m_pTable;
@@ -22,7 +22,7 @@ public:
 	HashTable(size_t capacity);
 	~HashTable();
 
-	void Insert(Key key, const T& data);
+	void Insert(Key key, const Type& data);
 	void Delete(Key key);
 	//bool Find(Key key, const Value& outData) const;
 	void Print() const;
@@ -38,36 +38,36 @@ private:
 //--------------------------------------------------------------------------------------------------------------------
 // Ctor
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline HashTable<Key, T>::HashTable()
+template<typename Key, typename Type>
+inline HashTable<Key, Type>::HashTable()
 	: m_capacity{ kInitialCapacity }
 {
 	m_pTable = new Table[m_capacity];
 	for (size_t i = 0; i < m_capacity; ++i)
 	{
-		m_pTable[i].second = new LinkedList<T>;
+		m_pTable[i].second = new LinkedList<Type>;
 	}
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Ctor with initial capacity
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline HashTable<Key, T>::HashTable(size_t capacity)
+template<typename Key, typename Type>
+inline HashTable<Key, Type>::HashTable(size_t capacity)
 	: m_capacity{ capacity }
 {
 	m_pTable = new Table[m_capacity];
 	for (size_t i = 0; i < m_capacity; ++i)
 	{
-		m_pTable[i].second = new LinkedList<T>;
+		m_pTable[i].second = new LinkedList<Type>;
 	}
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Dtor
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline HashTable<Key, T>::~HashTable()
+template<typename Key, typename Type>
+inline HashTable<Key, Type>::~HashTable()
 {
 	Destroy();
 }
@@ -75,8 +75,8 @@ inline HashTable<Key, T>::~HashTable()
 //--------------------------------------------------------------------------------------------------------------------
 // insert x at the head of list T[Hash(key)]
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Insert(Key key, const T& data)
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Insert(Key key, const Type& data)
 {
 	size_t hashKey = Hash(key);
 	m_pTable[hashKey].first = hashKey;
@@ -86,8 +86,8 @@ inline void HashTable<Key, T>::Insert(Key key, const T& data)
 //--------------------------------------------------------------------------------------------------------------------
 // delete x from the list T[Hash(key)]
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Delete(Key key)
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Delete(Key key)
 {
 	size_t hashKey = Hash(key);
 	m_pTable[hashKey].second->PopBack();
@@ -107,8 +107,8 @@ inline void HashTable<Key, T>::Delete(Key key)
 //--------------------------------------------------------------------------------------------------------------------
 // Print key value pair
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Print() const
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Print() const
 {
 	for (size_t i = 0; i < m_capacity; ++i)
 	{
@@ -123,24 +123,24 @@ inline void HashTable<Key, T>::Print() const
 //--------------------------------------------------------------------------------------------------------------------
 // Delete current content
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Clear()
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Clear()
 {
 	Destroy();
 }
 
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Test()
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
 	Key key = 0;		// Key in hash table
-	T value = 0;		// Be used as value
+	Type value = 0;		// Be used as value
 
 	// Create list
 
-	HashTable<Key, T> hashTable(9);
+	HashTable<Key, Type> hashTable(9);
 #if _DEBUG
 	hashTable.Insert(5,  0);	// Hashed 5
 	hashTable.Insert(28, 0);	// Hashed 1
@@ -202,14 +202,14 @@ inline void HashTable<Key, T>::Test()
 //--------------------------------------------------------------------------------------------------------------------
 // The hash function
 //--------------------------------------------------------------------------------------------------------------------
-template<typename Key, typename T>
-inline size_t HashTable<Key, T>::Hash(Key key) const
+template<typename Key, typename Type>
+inline size_t HashTable<Key, Type>::Hash(Key key) const
 {
 	return static_cast<size_t>(key % m_capacity);
 }
 
-template<typename Key, typename T>
-inline void HashTable<Key, T>::Destroy()
+template<typename Key, typename Type>
+inline void HashTable<Key, Type>::Destroy()
 {
 	for (size_t i = 0; i < m_capacity; ++i)
 	{

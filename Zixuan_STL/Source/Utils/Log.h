@@ -53,8 +53,9 @@ public:
 	void SetColor(Color color);
 
 	// API
-	void LogInfo(std::string category, int line, const char* file, const char* format, ...);
+	void LogInfo(const std::string& category, int line, const char* file, const char* format, ...);
 	void PrintInColor(Color color, const char* format, ...);
+
 private:
 	Log();
 };

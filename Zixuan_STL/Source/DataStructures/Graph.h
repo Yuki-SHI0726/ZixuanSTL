@@ -190,7 +190,7 @@ constexpr typename Graph<Type>::NodeId Graph<Type>::AddNode(const Type& data)
 // weight is default to 1
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
-constexpr void Graph<Type>::AddEdge(NodeId fromId, NodeId toId, Dist weight)
+constexpr void Graph<Type>::AddEdge(NodeId fromId, NodeId toId, Dist weight /*= 1.0f*/)
 {
 	assert(fromId < m_vertices.size() && toId < m_vertices.size());
 	m_adjacencyList[fromId].emplace(toId, weight);
@@ -629,16 +629,16 @@ inline constexpr void Graph<Type>::BreadthFirstSearch(NodeId startNodeId, Func&&
 		for (const auto& [kNeighbor, kWeight] : m_adjacencyList[kCurrentNodeId])
 		{
 			// If we haven't seen this neighbor before
-			if (!m_vertices[kNeighbor].m_closed)
-			{
-				// Set the distance and previous node
-				m_vertices[kNeighbor].m_distance = m_vertices[kCurrentNodeId].m_distance + 1;
-				m_vertices[kNeighbor].m_prev = kCurrentNodeId;
+			if (m_vertices[kNeighbor].m_closed)
+				continue;
+			
+			// Set the distance and previous node
+			m_vertices[kNeighbor].m_distance = m_vertices[kCurrentNodeId].m_distance + 1;
+			m_vertices[kNeighbor].m_prev = kCurrentNodeId;
 
-				// close the node and add to the open set
-				m_vertices[kNeighbor].m_closed = true;
-				openSet.emplace(kNeighbor);
-			}
+			// close the node and add to the open set
+			m_vertices[kNeighbor].m_closed = true;
+			openSet.emplace(kNeighbor);
 		}
 	}
 }
@@ -924,14 +924,14 @@ inline constexpr void Graph<Type>::InternalDepthFirstSearch(NodeId nodeId, Func&
 
 	for (const auto& [kTargetId, kWeight] : m_adjacencyList[nodeId])
 	{
-		if (!m_vertices[kTargetId].m_closed)
-		{
-			// set the distance and previous node
-			m_vertices[kTargetId].m_distance = m_vertices[nodeId].m_distance + 1;
-			m_vertices[kTargetId].m_prev = nodeId;
+		if (m_vertices[kTargetId].m_closed)
+			continue;
 
-			// Recursive call 
-			InternalDepthFirstSearch(kTargetId, std::forward<Func>(func));
-		}
+		// set the distance and previous node
+		m_vertices[kTargetId].m_distance = m_vertices[nodeId].m_distance + 1;
+		m_vertices[kTargetId].m_prev = nodeId;
+
+		// Recursive call 
+		InternalDepthFirstSearch(kTargetId, std::forward<Func>(func));
 	}
 }

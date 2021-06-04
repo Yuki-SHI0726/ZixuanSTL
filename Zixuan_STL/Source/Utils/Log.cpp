@@ -12,7 +12,7 @@ void Log::SetColor(Color color)
     SetConsoleTextAttribute(m_consoleHandle, static_cast<int>(color));
 }
 
-void Log::LogInfo(std::string category, int line, const char* file, const char* format, ...)
+void Log::LogInfo(const std::string& category, int line, const char* file, const char* format, ...)
 {
     char messageBuffer[512];
 

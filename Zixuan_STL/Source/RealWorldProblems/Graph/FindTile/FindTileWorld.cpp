@@ -48,6 +48,8 @@ void FindTileWorld::Run()
 	PrintMap();
 	AStar();
 	PrintShortestPath(m_destNodeId);
+
+	// A -> G -> M -> S -> T -> U -> O -> P -> Q -> R
 }
 
 //----------------------------------------------------------------------------------------------------------

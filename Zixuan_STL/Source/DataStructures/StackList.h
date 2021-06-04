@@ -5,22 +5,22 @@
 //--------------------------------------------------------------------------------------------------------------------
 // Stack implemented by Linkedlist
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
+template<class Type>
 class StackList
 {
 private:
-	LinkedList<T> m_stackList;
+	LinkedList<Type> m_stackList;
 	
 	// Top is alwasy list's Head
 
 public:
 	StackList();
 
-	void Push(const T& val) { m_stackList.PushFront(val); }
+	void Push(const Type& val) { m_stackList.PushFront(val); }
 	void Print() const;
 	void Clear() { m_stackList.Clear(); }
-	T Pop() { return m_stackList.PopFront(); }
-	T Top() const { return m_stackList.Head()->GetValue(); }
+	Type Pop() { return m_stackList.PopFront(); }
+	Type Top() const { return m_stackList.Head()->GetValue(); }
 	bool Empty() const { return m_stackList.Empty(); }
 	size_t GetSize() const { return m_stackList.GetSize(); }
 	
@@ -30,8 +30,8 @@ public:
 //--------------------------------------------------------------------------------------------------------------------
 // Dtor
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline StackList<T>::StackList()
+template<class Type>
+inline StackList<Type>::StackList()
 	: m_stackList{}
 {
 }
@@ -39,8 +39,8 @@ inline StackList<T>::StackList()
 //--------------------------------------------------------------------------------------------------------------------
 // Print stack, mark where top is
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline void StackList<T>::Print() const
+template<class Type>
+inline void StackList<Type>::Print() const
 {
 	m_stackList.Print("Top");
 }
@@ -48,19 +48,19 @@ inline void StackList<T>::Print() const
 //--------------------------------------------------------------------------------------------------------------------
 // Test
 //--------------------------------------------------------------------------------------------------------------------
-template<class T>
-inline void StackList<T>::Test()
+template<class Type>
+inline void StackList<Type>::Test()
 {
 	// Variables for testing
 	bool shouldQuit = false;
 	size_t i = 0;       // Used as capacity and index
-	T value = 0;		// Be used as value
+	Type value = 0;		// Be used as value
 
 	// I'm tired typing in initial size and elements to test sorting algorithms
-	StackList<T> stackList{  };
+	StackList<Type> stackList{  };
 #if _DEBUG
-	stackList.Push(static_cast<T>(76));
-	stackList.Push(static_cast<T>(68));
+	stackList.Push(static_cast<Type>(76));
+	stackList.Push(static_cast<Type>(68));
 
 #else
 		// Get capacity from user

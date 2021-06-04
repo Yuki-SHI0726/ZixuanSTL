@@ -13,6 +13,7 @@
 #include "RedBlackTree.h"
 #include "Graph.h"
 #include "Actor/Actor.h"
+#include "Utils/Helpers.h"
 
 #include <iostream>
 #include <conio.h>
@@ -61,19 +62,14 @@ bool Run()
 
 int main()
 {
-	//bool shouldQuit = false;
-	//StructureManager::Get().Init();
+	bool shouldQuit = false;
+	StructureManager::Get().Init();
 
-	//while (!shouldQuit)
-	//{
-	//	StructureManager::Get().ShowStructures();
-	//	shouldQuit = Run();
-	//}
-
-	Graph<char> graph;
-	graph.BuildDirectedWeightedGraph();
-	graph.RunDijkstraSearch(1, [](size_t index, char data) {});
-	graph.PrintShortestPath(3);
+	while (!shouldQuit)
+	{
+		StructureManager::Get().ShowStructures();
+		shouldQuit = Run();
+	}
 
 	return 0;
 }
