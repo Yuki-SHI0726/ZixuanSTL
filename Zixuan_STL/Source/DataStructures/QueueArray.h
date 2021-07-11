@@ -11,7 +11,7 @@ template<class Type>
 class QueueArray
 {
 private:
-	Type* m_pQueue;
+	std::byte* m_pBuffer;
 
 	size_t m_capacity;
 	size_t m_size;   
@@ -21,12 +21,11 @@ private:
 	size_t m_tailIndex;
 
 public:
-	QueueArray();
-	QueueArray(size_t capacity);
+	QueueArray(size_t capacity = kInitialCapacity);
 	~QueueArray();
 
 	void Enqueue(const Type& val);
-	Type& Dequeue();
+	Type Dequeue();
 	void Print() const;
 	void Clear();
 	Type& Tail() const;
@@ -43,25 +42,14 @@ private:
 };
 
 template<class Type>
-inline QueueArray<Type>::QueueArray()
-	: m_pQueue(nullptr)
-	, m_capacity(kInitialCapacity)
-	, m_size(0)
-	, m_headIndex{ 0 }
-	, m_tailIndex{ 0 }
-{
-	m_pQueue = new Type[kInitialCapacity];
-}
-
-template<class Type>
-inline QueueArray<Type>::QueueArray(size_t capacity)
-	: m_pQueue(nullptr)
+inline QueueArray<Type>::QueueArray(size_t capacity /*= kInitialCapacity*/)
+	: m_pBuffer(nullptr)
 	, m_capacity(capacity)
 	, m_size(0)
 	, m_headIndex{ 0 }
 	, m_tailIndex{ 0 }
 {
-	m_pQueue = new Type[m_capacity];
+	m_pBuffer = new std::byte[m_capacity * sizeof(Type)];
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -81,13 +69,14 @@ inline void QueueArray<Type>::Enqueue(const Type& val)
 	assert(m_size <= m_capacity);
 
 	// Enqueue the data
-	m_pQueue[m_tailIndex] = val;
+	Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+	pTypeArray[m_tailIndex] = val;
 
 	// Increment tail index
 	++m_tailIndex;
 
 	// Wrap around if tail hit max size
-	if (m_tailIndex >= kInitialCapacity)
+	if (m_tailIndex >= m_capacity)
 		m_tailIndex = 0;
 
 	// Increment size
@@ -95,24 +84,25 @@ inline void QueueArray<Type>::Enqueue(const Type& val)
 }
 
 template<class Type>
-inline Type& QueueArray<Type>::Dequeue()
+inline Type QueueArray<Type>::Dequeue()
 {
 	// Underflow checking
 	// If size is less than 0, it's empty
 	assert(m_size > 0);
 
 	// Get return value
-	Type& pVal = m_pQueue[m_headIndex];
+	Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+	Type pVal = pTypeArray[m_headIndex];
 
 	// If the element is not trivially destructible, call it's destructor
 	if constexpr (!std::is_trivially_destructible_v<Type>)
-		m_pQueue[m_headIndex].~Type();
+		pTypeArray[m_headIndex].~Type();
 
 	// Increment head
 	++m_headIndex;
 
 	// Wrap around if head hit max size
-	if (m_headIndex >= kInitialCapacity)
+	if (m_headIndex >= m_capacity)
 		m_headIndex = 0;
 
 	// Decrement size
@@ -128,11 +118,13 @@ inline void QueueArray<Type>::Print() const
 
 	// Tracking current index to print
 	size_t current = m_headIndex;
+	Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+
 	for (size_t i = 0; i < m_size; ++i)
 	{
-		std::cout << m_pQueue[current] << ", ";
+		std::cout << pTypeArray[current] << ", ";
 		++current;
-		if (current >= kInitialCapacity)
+		if (current >= m_capacity)
 			current = 0;
 	}
 
@@ -142,7 +134,7 @@ inline void QueueArray<Type>::Print() const
 template<class Type>
 inline void QueueArray<Type>::Clear()
 {
-	std::memset(m_pQueue, 0, sizeof(Type) * m_size);
+	Destroy();
 	m_headIndex = 0;
 	m_tailIndex = 0;
 	m_size = 0;
@@ -152,14 +144,16 @@ template<class Type>
 inline Type& QueueArray<Type>::Tail() const
 {
 	assert(m_size > 0);
-	return m_pQueue[(m_tailIndex == 0) ? (m_capacity - 1) : (m_tailIndex - 1)];
+	Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+	return pTypeArray[(m_tailIndex == 0) ? (m_capacity - 1) : (m_tailIndex - 1)];
 }
 
 template<class Type>
 inline Type& QueueArray<Type>::Head() const
 {
 	assert(m_size > 0);
-	return m_pQueue[m_headIndex];
+	Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+	return pTypeArray[m_headIndex];
 }
 
 template<class Type>
@@ -241,21 +235,19 @@ inline void QueueArray<Type>::Destroy()
 	// If the type of elements is not trivially destructible, call it's destructor
 	if constexpr (!std::is_trivially_destructible_v<Type>)
 	{
+		Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+
 		// Tracking current index to destroy
 		size_t current = m_headIndex;
 		for (size_t i = 0; i < m_size; ++i)
 		{
-			m_pQueue[current].~Type();
+			pTypeArray[current].~Type();
 			++current;
-			if (current >= kInitialCapacity)
+			if (current >= m_capacity)
 				current = 0;
 		}
 	}
 
-	// If m_pArray is not nullptr, deallocate it and set it to nullptr
-	if (m_pQueue != nullptr)
-	{
-		delete[] m_pQueue;
-		m_pQueue = nullptr;
-	}
+	delete[] m_pBuffer;
+	m_pBuffer = nullptr;
 }

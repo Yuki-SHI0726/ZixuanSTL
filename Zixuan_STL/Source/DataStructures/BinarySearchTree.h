@@ -64,33 +64,28 @@ public:
 	void Clear();
 	void DeleteBySuccessor(const KeyType& key);
 	void DeleteByPredecessor(const KeyType& key);
+	void ChangeKey(const KeyType& keyToFind, const KeyType& keyToChange);
 
-	// Max and minimum
-	// 12.2-2
+	// Accessors
 	std::optional<DataType> FindMinIter() const;
 	std::optional<DataType> FindMaxIter() const;
 	std::optional<DataType> FindMinRecur() const;
 	std::optional<DataType> FindMaxRecur() const;
-
-	// 12.1-4
-	template <class Func> void PreOrderWalkRecursive(Func&& func);
-	template <class Func> void PostOrderWalkRecursive(Func&& func);
-
-	// Assignment 10.2 Changing Binary Tree
-	void ChangeKey(const KeyType& keyToFind, const KeyType& keyToChange);
+	int GetHeight(Node* pNode) const;
+	size_t GetSize() const { return m_size; }
+	std::optional<DataType> GetRootData() const;
 
 	// Traversal
-	template <class Func> void InOrderWalkRecursive(Func&& func);
 	template <class Func> void InOrderWalkIterative(Func&& func);
+	template <class Func> void InOrderWalkRecursive(Func&& func);
+	template <class Func> void PreOrderWalkRecursive(Func&& func);
+	template <class Func> void PostOrderWalkRecursive(Func&& func);
 	void PrintNodesInOrder() const;
 
 	// Look up
 	std::optional<DataType> Search(const KeyType& key) const;
 	std::optional<DataType> operator[](const KeyType& key) { return Search(key); }
 	const std::optional<DataType> operator[](const KeyType& key) const { return Search(key); }
-	int GetHeight(Node* pNode) const;
-	size_t GetSize() const { return m_size; }
-	std::optional<DataType> GetRootData() const;
 
 	// Test
 	static void Test();
@@ -100,18 +95,15 @@ private:
 	void Destroy();
 	void Transplant(Node* pNodeToReplace, Node* pReplacingNode);
 
-	// Max and minimum
-	// 12.2-2
+	// Accessors
 	Node* InteralFindMinRecur(Node* pParent) const;
 	Node* InternalFindMaxRecur(Node* pParent) const;
-
-	// 12.1-4
-	template <class Func> void RecursivePreOrderWalk(Node* pNode, Func&& func);
-	template <class Func> void RecursivePostOrderWalk(Node* pNode, Func&& func);
 
 	// Traversal
 	template <class Func> void RecursiveInOrderWalk(Node* pNode, Func&& func);
 	void RecursivePrintNodesInOrder(Node* pNode) const;
+	template <class Func> void RecursivePreOrderWalk(Node* pNode, Func&& func);
+	template <class Func> void RecursivePostOrderWalk(Node* pNode, Func&& func);
 
 	// Lookup
 	Node* InternalFindNode(const KeyType& key) const;

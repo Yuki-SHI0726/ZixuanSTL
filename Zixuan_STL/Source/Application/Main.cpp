@@ -79,8 +79,8 @@ int main()
 
 	testArr.Print();
 
-	testArr.PopBack();
-	testArr.PopFront();
+	testArr.PushFront(0);
+	testArr.PushFront(-1);
 
 	testArr.Print();
 
@@ -89,7 +89,6 @@ int main()
 
 /*
 * TODO list:
-* - UnorderedArray: PopFront
 * - UnorderedArray: Iterator
 * - QueueArray: Switch from Type* pArray to std::byte*
 * - Implement Smart Ptrs

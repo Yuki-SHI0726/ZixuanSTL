@@ -46,6 +46,7 @@ public:
     void PushBack(const Type& val);
     void PushBack(Type&& val);
     void PushFront(const Type& val);
+    void PushFront(Type&& val);
     template <class... Args> void EmplaceBack(Args&&... args);
     Type PopBack();
     Type PopFront();
@@ -238,7 +239,7 @@ inline void UnorderedArray<Type>::PushBack(const Type& val)
     //// Add element to the end of the array
     //m_pArray[m_size] = val;
 
-    new(m_pBuffer + (m_size * sizeof(Type))) Type(val);  // std::byte* m_pBuffer
+    new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
     ++m_size;
 }
 
@@ -249,7 +250,7 @@ inline void UnorderedArray<Type>::PushBack(Type&& val)
     if (m_size >= m_capacity)
         Expand(m_capacity * kExpandMultiplier);
 
-    new(m_pBuffer + (m_size * sizeof(Type))) Type(val);  // std::byte* m_pBuffer
+    new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
     ++m_size;
 }
 
@@ -269,16 +270,56 @@ inline void UnorderedArray<Type>::EmplaceBack(Args && ...args)
 
 //--------------------------------------------------------------------------------------------------------------------
 // Takes in a value to be inserted at the begin of the array
-// Time: O(n)
+// Note: This is an O(n) time operation. If you don't care about how things order in this array, use EmplaceBack & Swap instead
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
 inline void UnorderedArray<Type>::PushFront(const Type& val)
 {
+    // If the array is full, expand it
+    if (m_size >= m_capacity)
+        Expand(m_capacity * kExpandMultiplier);
+
+    // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
+    Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+    std::memmove(pTypeArray + 1, pTypeArray, m_size * sizeof(Type));
+
+    // Create the new element at front
+    new(m_pBuffer) Type(val);
+
+    // Increment size
+    ++m_size;
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Takes in a value to be inserted at the begin of the array
+// Note: This is an O(n) time operation. If you don't care about how things order in this array, use EmplaceBack & Swap instead
+// Time:  O(n)
+// Space: O(1)
+//--------------------------------------------------------------------------------------------------------------------
+template<class Type>
+inline void UnorderedArray<Type>::PushFront(Type&& val)
+{    
+    // If the array is full, expand it
+    if (m_size >= m_capacity)
+        Expand(m_capacity * kExpandMultiplier);
+
+    // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
+    Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+    std::memmove(pTypeArray + 1, pTypeArray, m_size * sizeof(Type));
+
+    // Create the new element at front
+    new(m_pBuffer) Type(val);
+
+    // Increment size
+    ++m_size;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 // Removes the last element of the array. Return the element's copy
-// Time: O(1)
+// Time:  O(1)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
 inline Type UnorderedArray<Type>::PopBack()
