@@ -13,8 +13,8 @@ class QueueArray
 private:
 	Type* m_pQueue;
 
-	size_t m_capacity; // was m_maxSize  
-	size_t m_size;     // was m_numElements
+	size_t m_capacity;
+	size_t m_size;   
 
 	// Used for tracking head and tail in the array
 	size_t m_headIndex;
@@ -106,7 +106,7 @@ inline Type& QueueArray<Type>::Dequeue()
 
 	// If the element is not trivially destructible, call it's destructor
 	if constexpr (!std::is_trivially_destructible_v<Type>)
-		m_pQueue[m_headIndex].~T();
+		m_pQueue[m_headIndex].~Type();
 
 	// Increment head
 	++m_headIndex;
@@ -245,7 +245,7 @@ inline void QueueArray<Type>::Destroy()
 		size_t current = m_headIndex;
 		for (size_t i = 0; i < m_size; ++i)
 		{
-			m_pQueue[current].~T();
+			m_pQueue[current].~Type();
 			++current;
 			if (current >= kInitialCapacity)
 				current = 0;

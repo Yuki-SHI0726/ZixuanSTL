@@ -22,14 +22,8 @@
     <Filter Include="DataStructures">
       <UniqueIdentifier>{d3870f6b-1058-48aa-a6b2-107c1c80bb2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\ECS">
-      <UniqueIdentifier>{38741b52-2c00-4d3a-bfe0-3a6638ae3080}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\ECS\Actor">
-      <UniqueIdentifier>{ea5cbfee-9d76-442f-9955-f109e3653788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\ECS\Components">
-      <UniqueIdentifier>{a860f53e-95c8-422e-a876-255fe3b9ce8b}</UniqueIdentifier>
+    <Filter Include="SmartPointers">
+      <UniqueIdentifier>{c7776a7f-93c6-41fb-8754-414fde59ef71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,12 +53,6 @@
     </ClCompile>
     <ClCompile Include="Source\Utils\StructureManager.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\ECS\Components\ComponentBase.cpp">
-      <Filter>Utils\ECS\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\ECS\Components\HealthComponent.cpp">
-      <Filter>Utils\ECS\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,14 +125,20 @@
     <ClInclude Include="Source\Utils\Vector3.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\ECS\Actor\Actor.h">
-      <Filter>Utils\ECS\Actor</Filter>
+    <ClInclude Include="Source\Utils\Triangle.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\ECS\Components\ComponentBase.h">
-      <Filter>Utils\ECS\Components</Filter>
+    <ClInclude Include="Source\Utils\Circle.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\ECS\Components\HealthComponent.h">
-      <Filter>Utils\ECS\Components</Filter>
+    <ClInclude Include="Source\Utils\Math.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Sphere.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UniquePtr.h">
+      <Filter>SmartPointers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

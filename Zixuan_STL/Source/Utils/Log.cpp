@@ -1,20 +1,19 @@
 #include "Log.h"
-#include <time.h>
 
 Log& Log::Get()
 {
-    static Log s_instance;
-    return s_instance;
+	static Log s_instance;
+	return s_instance;
 }
 
 void Log::SetColor(Color color)
 {
-    SetConsoleTextAttribute(m_consoleHandle, static_cast<int>(color));
+	SetConsoleTextAttribute(m_consoleHandle, static_cast<int>(color));
 }
 
 void Log::LogInfo(const std::string& category, int line, const char* file, const char* format, ...)
 {
-    char messageBuffer[512];
+	char messageBuffer[512];
 
 	va_list args;
 	va_start(args, format);
@@ -38,28 +37,12 @@ void Log::LogInfo(const std::string& category, int line, const char* file, const
 	std::cout << "[" << category << "]" << fullPath << "(" << line << ") - " << messageBuffer << ". Time: " << time << std::endl;
 }
 
-void Log::PrintInColor(Color color, const char* format, ...)
-{
-	char messageBuffer[512];
-
-	va_list args;
-	va_start(args, format);
-
-	vsprintf_s(messageBuffer, format, args);
-
-	va_end(args);
-
-	SetConsoleTextAttribute(m_consoleHandle, static_cast<int>(color));
-	std::cout << messageBuffer;
-	SetConsoleTextAttribute(m_consoleHandle, static_cast<int>(m_currentColor));
-}
-
 Log::Log()
-    : m_consoleHandle{ GetStdHandle(STD_OUTPUT_HANDLE) }
-    , m_currentColor{ Color::kLightGray }
+	: m_consoleHandle{ GetStdHandle(STD_OUTPUT_HANDLE) }
+	, m_currentColor{ Color::kLightGray }
 {
-    m_category.insert({"Info", Color::kWhite});
-    m_category.insert({"Error", Color::kRed});
-    m_category.insert({"Warning", Color::kYellow});
-    m_category.insert({"Prompt", Color::kCyan});
+	m_category.insert({ "Info", Color::kWhite });
+	m_category.insert({ "Error", Color::kRed });
+	m_category.insert({ "Warning", Color::kYellow });
+	m_category.insert({ "Prompt", Color::kCyan });
 }

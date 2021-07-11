@@ -57,7 +57,7 @@ public:
     std::optional<size_t> Search(const Type& val) const;
 
     // Utils
-    void Print() const;
+    void Print(bool horizontal = true) const;
 
     // Sorting algorithms
     void BubbleSort();
@@ -277,7 +277,7 @@ inline void UnorderedArray<Type>::PushFront(const Type& val)
 }
 
 //--------------------------------------------------------------------------------------------------------------------
-// Removes the last element of the array. Return the element's reference
+// Removes the last element of the array. Return the element's copy
 // Time: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
@@ -286,12 +286,13 @@ inline Type UnorderedArray<Type>::PopBack()
     // Underflow checking
     assert(!Empty());
 
+    // Grab the last item in the UnorderedArray
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
     Type object = pTypeArray[m_size - 1];
 
     // If the element is not trivially destructible, call it's destructor
     if constexpr (!std::is_trivially_destructible_v<Type>)
-        pTypeArray[m_size - 1].~T();
+        pTypeArray[m_size - 1].~Type();
 
     // Reduce array size
     --m_size;
@@ -301,13 +302,26 @@ inline Type UnorderedArray<Type>::PopBack()
 }
 
 //--------------------------------------------------------------------------------------------------------------------
-// Removes the last element of the array. Return the element's reference
-// Time: O(n)
+// Removes the last element of the array. Return the element's copy.
+// Note: This is an O(n) time operation. If you don't care about how things order in this array, use swap & pop instead
+// Time:  O(n)
+// Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
 inline Type UnorderedArray<Type>::PopFront()
 {
-    // TODO: insert return statement here
+    // Underflow checking
+    assert(!Empty());
+
+    // Grab the first item's copy in the UnorderedArray
+    Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+    Type object = pTypeArray[0];
+
+    // Shift every element one spot forward to fill the deleted item
+    Erase(0);
+
+    // Return element
+    return object;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -323,7 +337,7 @@ inline void UnorderedArray<Type>::Erase(size_t index)
 
     // If the element is not trivially destructible, call it's destructor
     if constexpr (!std::is_trivially_destructible_v<Type>)
-        pTypeArray[index].~T();
+        pTypeArray[index].~Type();
 
     // Move every element after the indexed element one spot forward.
     std::memmove(pTypeArray + index, pTypeArray + index + 1, (m_size - index) * sizeof(Type));
@@ -360,12 +374,23 @@ inline Type& UnorderedArray<Type>::operator[](size_t index)
 // Space: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline void UnorderedArray<Type>::Print() const
+inline void UnorderedArray<Type>::Print(bool horizontal /*= true*/) const
 {
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
-    std::cout << "Elements: { \n";
-    for (size_t i = 0; i < m_size; ++i)
-        std::cout << pTypeArray[i] << "\n";
+
+    if (horizontal)
+    {
+        std::cout << "Elements: { ";
+        for (size_t i = 0; i < m_size; ++i)
+            std::cout << pTypeArray[i] << ", ";
+    }
+    else
+    {
+        std::cout << "Elements: { \n";
+        for (size_t i = 0; i < m_size; ++i)
+            std::cout << pTypeArray[i] << "\n";
+    }
+
     std::cout << "} " << std::endl;
 }
 
@@ -628,7 +653,7 @@ inline void UnorderedArray<Type>::Destroy()
     {
         Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
         for (size_t i = 0; i < m_size; ++i)
-            pTypeArray[i].~T();
+            pTypeArray[i].~Type();
     }
 
     delete[] m_pBuffer;

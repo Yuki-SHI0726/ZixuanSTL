@@ -155,7 +155,7 @@ inline Type OrderedArray<Type>::Pop()
 
     // If the element is not trivially destructible, call it's destructor
     if constexpr (!std::is_trivially_destructible_v<Type>)
-        pTypeArray[m_size - 1].~T();
+        pTypeArray[m_size - 1].~Type();
 
     // Reduce array size
     --m_size;
@@ -177,7 +177,7 @@ inline void OrderedArray<Type>::Erase(size_t index)
 
     // If the element is not trivially destructible, call it's destructor
     if constexpr (!std::is_trivially_destructible_v<Type>)
-        pTypeArray[index].~T();
+        pTypeArray[index].~Type();
 
     // Move every element after the indexed element one spot forward.
     std::memmove(pTypeArray + index, pTypeArray + index + 1, (m_size - index) * sizeof(Type));
@@ -386,7 +386,7 @@ inline void OrderedArray<Type>::Destroy()
         Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
         for (size_t i = 0; i < m_size; ++i)
         {
-            pTypeArray[i].~T();
+            pTypeArray[i].~Type();
         }
     }
 

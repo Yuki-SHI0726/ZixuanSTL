@@ -303,7 +303,7 @@ void FindTileWorld::PrintShortestPath(NodeId nodeId)
 		}
 	}();
 
-	Log::Get().PrintInColor(color, "%c", m_vertices[nodeId].m_data);
+	Log::Get().PrintInColor(color, m_vertices[nodeId].m_data);
 	std::cout << " -> ";
 }
 
@@ -341,7 +341,7 @@ constexpr void FindTileWorld::PrintMap() const
 				}
 			}();
 
-			Log::Get().PrintInColor(color, "%c", m_vertices[id].m_data);
+			Log::Get().PrintInColor(color, m_vertices[id].m_data);
 			std::cout << " ";
 		}
 

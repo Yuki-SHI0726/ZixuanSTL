@@ -87,7 +87,7 @@ inline void CircularQueue<Type>::Enqueue(const Type& val)
 	{
 		// Clean what's already in the tail index
 		if constexpr (!std::is_trivially_destructible_v<Type>)
-			m_pCircularQueue[m_rearIndex].~T();
+			m_pCircularQueue[m_rearIndex].~Type();
 
 		// Move head index forward
 		++m_frontIndex;
@@ -125,7 +125,7 @@ inline Type& CircularQueue<Type>::Dequeue()
 
 	// If the element is not trivially destructible, call it's destructor
 	if constexpr (!std::is_trivially_destructible_v<Type>)
-		m_pCircularQueue[m_frontIndex].~T();
+		m_pCircularQueue[m_frontIndex].~Type();
 
 	// Increment head
 	++m_frontIndex;
@@ -269,7 +269,7 @@ inline void CircularQueue<Type>::Destroy()
 		size_t current = m_frontIndex;
 		for (size_t i = 0; i < m_size; ++i)
 		{
-			m_pCircularQueue[current].~T();
+			m_pCircularQueue[current].~Type();
 			++current;
 			if (current >= kInitialCapacity)
 				current = 0;

@@ -12,7 +12,6 @@
 #include "BinarySearchTree.h"
 #include "RedBlackTree.h"
 #include "Graph.h"
-#include "Actor/Actor.h"
 #include "Utils/Helpers.h"
 
 #include <iostream>
@@ -62,14 +61,36 @@ bool Run()
 
 int main()
 {
-	bool shouldQuit = false;
-	StructureManager::Get().Init();
+	//bool shouldQuit = false;
+	//StructureManager::Get().Init();
 
-	while (!shouldQuit)
-	{
-		StructureManager::Get().ShowStructures();
-		shouldQuit = Run();
-	}
+	//while (!shouldQuit)
+	//{
+	//	StructureManager::Get().ShowStructures();
+	//	shouldQuit = Run();
+	//}
+
+	UnorderedArray<int> testArr;
+	testArr.EmplaceBack(1);
+	testArr.EmplaceBack(2);
+	testArr.EmplaceBack(3);
+	testArr.EmplaceBack(4);
+	testArr.EmplaceBack(5);
+
+	testArr.Print();
+
+	testArr.PopBack();
+	testArr.PopFront();
+
+	testArr.Print();
 
 	return 0;
 }
+
+/*
+* TODO list:
+* - UnorderedArray: PopFront
+* - UnorderedArray: Iterator
+* - QueueArray: Switch from Type* pArray to std::byte*
+* - Implement Smart Ptrs
+*/

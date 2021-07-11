@@ -897,9 +897,9 @@ inline constexpr void Graph<Type>::AStar(NodeId startNodeId, NodeId destNodeId, 
 			if (m_vertices[kNeighborNodeId].m_closed)
 				continue;
 
-			// Relax the node.  If this path is better, we insert it into the open set.  Note that this is guaranteed 
-			// to be the case the first time the node is seen because the distance is set to infinity, so this path is 
-			// guaranteed to be better.
+			// Relax the node.  If this path is better, we insert it into the open set. 
+			// Note that this is guaranteed to be the case the first time the node is seen because the distance is set to infinity,
+			// so this path is guaranteed to be better.
 			if (m_vertices[kNeighborNodeId].m_distance > m_vertices[currentNodeId].m_distance + kWeight)
 			{
 				m_vertices[kNeighborNodeId].m_distance = m_vertices[currentNodeId].m_distance + kWeight + Heuristic(destNodeId, kNeighborNodeId);
