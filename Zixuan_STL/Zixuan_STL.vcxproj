@@ -48,6 +48,7 @@
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTree.h" />
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.h" />
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeConstants.h" />
+    <ClInclude Include="Source\SmartPointers\UniquePtr.h" />
     <ClInclude Include="Source\Utils\Circle.h" />
     <ClInclude Include="Source\Utils\Helpers.h" />
     <ClInclude Include="Source\Utils\Log.h" />
@@ -57,7 +58,6 @@
     <ClInclude Include="Source\Utils\Triangle.h" />
     <ClInclude Include="Source\Utils\Vector2.h" />
     <ClInclude Include="Source\Utils\Vector3.h" />
-    <ClInclude Include="UniquePtr.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

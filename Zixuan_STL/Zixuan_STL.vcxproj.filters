@@ -137,7 +137,7 @@
     <ClInclude Include="Source\Utils\Sphere.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="UniquePtr.h">
+    <ClInclude Include="Source\SmartPointers\UniquePtr.h">
       <Filter>SmartPointers</Filter>
     </ClInclude>
   </ItemGroup>
