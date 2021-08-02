@@ -48,6 +48,7 @@ public:
     void PushFront(const Type& val);
     void PushFront(Type&& val);
     template <class... Args> void EmplaceBack(Args&&... args);
+    template <class... Args> void EmplaceFront(Args&&... args);
     Type PopBack();
     Type PopFront();
     void Erase(size_t index);
@@ -191,7 +192,6 @@ inline UnorderedArray<Type>& UnorderedArray<Type>::operator=(UnorderedArray&& ot
 
     // Clean old buffer
     delete[] m_pBuffer;
-    m_pBuffer = nullptr;
 
     // Move everything over
     m_size = other.m_size;
@@ -203,7 +203,7 @@ inline UnorderedArray<Type>& UnorderedArray<Type>::operator=(UnorderedArray&& ot
     other.m_capacity = 0;
     other.m_pBuffer = nullptr;
 
-    return (*this);
+    return *this;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -265,6 +265,27 @@ inline void UnorderedArray<Type>::EmplaceBack(Args && ...args)
         Expand(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(std::forward<Args>(args)...);
+    ++m_size;
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+// Emplace an object at the begin of the array
+// Note: This is an O(n) time operation. If you don't care about how things order in this array, use EmplaceBack & Swap instead
+// Time:  O(n)
+// Space: O(1)
+//--------------------------------------------------------------------------------------------------------------------
+template<class Type>
+template<class ...Args>
+inline void UnorderedArray<Type>::EmplaceFront(Args && ...args)
+{
+    if (m_size >= m_capacity)
+        Expand(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
+
+    // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
+    Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
+    std::memmove(pTypeArray + 1, pTypeArray, m_size * sizeof(Type));
+
+    new(m_pBuffer) Type(std::forward<Args>(args)...);
     ++m_size;
 }
 

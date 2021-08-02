@@ -5,7 +5,7 @@
 #define PATH_CHOICE 1
 
 #include "Utils/StructureManager.h"
-#include "Utils/Vector2.h"
+#include "Utils/Math/Vector2.h"
 
 #include <vector>
 #include <map>
@@ -22,6 +22,7 @@
 //	- Dijkstra's Algorithm
 //	- A*
 //	- Transpose
+//  - In/Out Degree
 //--------------------------------------------------------------------------------------------------------------------
 template <class Type>
 class Graph
@@ -40,7 +41,7 @@ private:
 		Type m_data;
 		NodeId m_id;
 
-		// Graph search data
+		// Graph search data, could also use SearchMap somewhere else instead
 		NodeId m_prev;
 		Dist m_distance;
 		bool m_closed;

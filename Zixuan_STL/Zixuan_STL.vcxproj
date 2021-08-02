@@ -26,8 +26,12 @@
     <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTree.cpp" />
     <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.cpp" />
     <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeMain.cpp" />
-    <ClCompile Include="Source\Utils\Log.cpp" />
+    <ClCompile Include="Source\Utils\ECS\Actor\Actor.cpp" />
+    <ClCompile Include="Source\Utils\ECS\Components\ComponentBase.cpp" />
+    <ClCompile Include="Source\Utils\ECS\Components\HealthComponent.cpp" />
+    <ClCompile Include="Source\Utils\Log\Log.cpp" />
     <ClCompile Include="Source\Utils\StructureManager.cpp" />
+    <ClCompile Include="Source\Utils\Timing\HighPrecisionTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DataStructures\BinarySearchTree.h" />
@@ -48,16 +52,25 @@
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTree.h" />
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.h" />
     <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeConstants.h" />
+    <ClInclude Include="Source\SmartPointers\SharedPtr.h" />
     <ClInclude Include="Source\SmartPointers\UniquePtr.h" />
-    <ClInclude Include="Source\Utils\Circle.h" />
+    <ClInclude Include="Source\SmartPointers\WeakPtr.h" />
+    <ClInclude Include="Source\Utils\ECS\Actor\Actor.h" />
+    <ClInclude Include="Source\Utils\ECS\Actor\TActor.h" />
+    <ClInclude Include="Source\Utils\ECS\Components\ComponentBase.h" />
+    <ClInclude Include="Source\Utils\ECS\Components\HealthComponent.h" />
     <ClInclude Include="Source\Utils\Helpers.h" />
-    <ClInclude Include="Source\Utils\Log.h" />
-    <ClInclude Include="Source\Utils\Math.h" />
-    <ClInclude Include="Source\Utils\Sphere.h" />
+    <ClInclude Include="Source\Utils\Log\Log.h" />
+    <ClInclude Include="Source\Utils\Math\Circle.h" />
+    <ClInclude Include="Source\Utils\Math\Math.h" />
+    <ClInclude Include="Source\Utils\Math\Sphere.h" />
+    <ClInclude Include="Source\Utils\Math\Triangle.h" />
+    <ClInclude Include="Source\Utils\Math\Vector2.h" />
+    <ClInclude Include="Source\Utils\Math\Vector3.h" />
+    <ClInclude Include="Source\Utils\OBJLoader.h" />
     <ClInclude Include="Source\Utils\StructureManager.h" />
-    <ClInclude Include="Source\Utils\Triangle.h" />
-    <ClInclude Include="Source\Utils\Vector2.h" />
-    <ClInclude Include="Source\Utils\Vector3.h" />
+    <ClInclude Include="Source\Utils\Timing\HighPrecisionTimer.h" />
+    <ClInclude Include="Source\Utils\Timing\SimpleInstrumentationProfiler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -137,7 +150,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);$(ProjectDir)Source\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -153,7 +166,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);$(ProjectDir)Source\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -169,7 +182,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);$(ProjectDir)Source\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -185,7 +198,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source\DataStructures;$(ProjectDir)Source;$(ProjectDir)Source\Utils\ECS;$(ProjectDir);$(ProjectDir)Source\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>

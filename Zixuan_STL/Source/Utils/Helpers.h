@@ -48,21 +48,21 @@ constexpr Type GetInput(const char* kPrompt, const Type kLimit, const Type kMax 
 //--------------------------------------------------------------------------------------------
 // Return exponential
 //--------------------------------------------------------------------------------------------
-template<typename Type>
-constexpr Type Exponential(Type base, Type exponent)
+template<typename BaseType, typename ExponentType = int>
+constexpr BaseType Exponential(BaseType base, ExponentType exponent)
 {
-	static_assert(std::is_arithmetic_v<Type>, "Must be a arithmetic type to get exponential");
+	static_assert(std::is_arithmetic_v<BaseType>, "Must be a arithmetic type to get exponential");
 
 	if (exponent == 0)
-		return 1;
+		return static_cast<BaseType>(1);
 
 	else if (exponent == 1)
 		return base;
 
 	else
 	{
-		Type result = base;
-		for (Type i = 0; i < exponent - 1; ++i)
+		BaseType result = base;
+		for (ExponentType i = static_cast<ExponentType>(0); i < exponent - static_cast<ExponentType>(1); ++i)
 			result *= base;
 		return result;
 	}

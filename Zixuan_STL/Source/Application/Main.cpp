@@ -12,17 +12,24 @@
 #include "BinarySearchTree.h"
 #include "RedBlackTree.h"
 #include "Graph.h"
-#include "Utils/Helpers.h"
+#include "SmartPointers/UniquePtr.h"
+#include "SmartPointers/SharedPtr.h"
+#include "SmartPointers/WeakPtr.h"
+#include "Helpers.h"
+#include "Math/Vector3.h"
+#include "Actor/Actor.h"
 
 #include <iostream>
 #include <conio.h>
 #include <string>
 #include <vld.h>
+#include <memory>
+#include <functional>
 
 bool Run()
 {
 	// Get array choice input
-	std::string input = "";
+	std::string input{ "" };
 	std::cin >> input;
 	system("cls");
 
@@ -59,37 +66,79 @@ bool Run()
 	return false;
 }
 
+void Func(int data, int* pPtr)
+{
+	std::cout << "Foo" << std::endl;
+}
+
 int main()
 {
-	//bool shouldQuit = false;
-	//StructureManager::Get().Init();
+	WeakPtr<Actor> pWeakFoo;
+	{
+		std::cout << pWeakFoo.UseCount() << std::endl;
+		{
+			SharedPtr<Actor> pBar = SharedPtr<Actor>::Make(10);
 
-	//while (!shouldQuit)
+			pWeakFoo = pBar;
+
+			if (!pWeakFoo.Expired())
+				pWeakFoo.Lock()->Work(Func);
+
+			std::cout << pWeakFoo.UseCount() << std::endl;
+		}
+
+		std::cout << pWeakFoo.UseCount() << std::endl;
+	}
+	if (!pWeakFoo.Expired())
+		pWeakFoo.Lock()->Work(Func);
+
+	std::cout << pWeakFoo.UseCount() << std::endl;
+
+
+	//std::weak_ptr<Actor> pWeakFoo;
 	//{
-	//	StructureManager::Get().ShowStructures();
-	//	shouldQuit = Run();
+	//	std::cout << pWeakFoo.use_count() << std::endl;
+	//	{
+	//		std::shared_ptr<Actor> pBar = std::make_shared<Actor>(10);
+
+	//		pWeakFoo = pBar;
+
+	//		if (!pWeakFoo.expired())
+	//		{
+	//			pWeakFoo.lock()->Work(Func);
+	//			std::cout << pWeakFoo.use_count() << std::endl;
+	//		}
+	//	}
+
+	//	std::cout << pWeakFoo.use_count() << std::endl;
+	//}
+	//if (!pWeakFoo.expired())
+	//{
+	//	pWeakFoo.lock()->Work(Func);
 	//}
 
-	UnorderedArray<int> testArr;
-	testArr.EmplaceBack(1);
-	testArr.EmplaceBack(2);
-	testArr.EmplaceBack(3);
-	testArr.EmplaceBack(4);
-	testArr.EmplaceBack(5);
-
-	testArr.Print();
-
-	testArr.PushFront(0);
-	testArr.PushFront(-1);
-
-	testArr.Print();
+	//std::cout << pWeakFoo.use_count() << std::endl;
 
 	return 0;
 }
 
 /*
 * TODO list:
-* - UnorderedArray: Iterator
-* - QueueArray: Switch from Type* pArray to std::byte*
 * - Implement Smart Ptrs
+* - UnorderedArray: Iterator
+* - Graph: Jump Point Search
+* - Vector3: refactor
+* - Priority Queue
 */
+
+
+
+//bool shouldQuit = false;
+//StructureManager::Get().Init();
+
+//while (!shouldQuit)
+//{
+//	StructureManager::Get().ShowStructures();
+//	shouldQuit = Run();
+//}
+//Actor* pActor = new Actor(10);

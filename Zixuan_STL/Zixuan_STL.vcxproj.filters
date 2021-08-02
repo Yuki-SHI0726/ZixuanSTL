@@ -25,6 +25,24 @@
     <Filter Include="SmartPointers">
       <UniqueIdentifier>{c7776a7f-93c6-41fb-8754-414fde59ef71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\ECS">
+      <UniqueIdentifier>{ee8624c1-1f0c-40ad-8d9e-2e997df13b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\ECS\Actor">
+      <UniqueIdentifier>{858c74fb-fd3c-4883-8ae8-f57db55d2e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\ECS\Components">
+      <UniqueIdentifier>{66282fd1-7a23-472e-813f-03b3d156891b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Log">
+      <UniqueIdentifier>{059ffa9b-2f41-4147-a0cf-a65f9c3447c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Math">
+      <UniqueIdentifier>{b8e391c8-954c-452e-9391-588ab93cbef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Timing">
+      <UniqueIdentifier>{55f3ead2-847d-4321-8c6f-4b1b936cb457}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Main.cpp">
@@ -48,8 +66,20 @@
     <ClCompile Include="Source\RealWorldProblems\Graph\GraphMain.cpp">
       <Filter>RealWorldProblems\Graph</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\Log.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="Source\Utils\ECS\Components\ComponentBase.cpp">
+      <Filter>Utils\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\ECS\Components\HealthComponent.cpp">
+      <Filter>Utils\ECS\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\ECS\Actor\Actor.cpp">
+      <Filter>Utils\ECS\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Log\Log.cpp">
+      <Filter>Utils\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Timing\HighPrecisionTimer.cpp">
+      <Filter>Utils\Timing</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utils\StructureManager.cpp">
       <Filter>Utils</Filter>
@@ -110,34 +140,61 @@
     <ClInclude Include="Source\DataStructures\UnorderedArray.h">
       <Filter>DataStructures</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SmartPointers\UniquePtr.h">
+      <Filter>SmartPointers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ECS\Components\ComponentBase.h">
+      <Filter>Utils\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ECS\Components\HealthComponent.h">
+      <Filter>Utils\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ECS\Actor\Actor.h">
+      <Filter>Utils\ECS\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ECS\Actor\TActor.h">
+      <Filter>Utils\ECS\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Log\Log.h">
+      <Filter>Utils\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Circle.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Math.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Sphere.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Triangle.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Vector2.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Vector3.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Timing\HighPrecisionTimer.h">
+      <Filter>Utils\Timing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Timing\SimpleInstrumentationProfiler.h">
+      <Filter>Utils\Timing</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Utils\Helpers.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\Log.h">
+    <ClInclude Include="Source\Utils\OBJLoader.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\StructureManager.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\Vector2.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="Source\SmartPointers\SharedPtr.h">
+      <Filter>SmartPointers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\Vector3.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Triangle.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Circle.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Math.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Sphere.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SmartPointers\UniquePtr.h">
+    <ClInclude Include="Source\SmartPointers\WeakPtr.h">
       <Filter>SmartPointers</Filter>
     </ClInclude>
   </ItemGroup>

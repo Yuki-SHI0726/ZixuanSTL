@@ -8,9 +8,8 @@ static constexpr size_t kExpandMultiplier = 2; // If the array is full, multiply
 
 enum class DataStructure : size_t
 {
-	kUnorderedArray = 0,
+	kUnorderedArray,
 	kOrderedArray,
-
 	kList,
 	kStackArray,
 	kStackList,
