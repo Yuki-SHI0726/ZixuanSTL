@@ -28,7 +28,7 @@ public:
 	// API
 	template<class... Args> static SharedPtr Make(Args&&... args);
 	Type* operator->() const{ return m_pRawPtr; }
-	Type* GetPtr() const { return m_pRawPtr; }
+	Type* GetRawPtr() const { return m_pRawPtr; }
 	int* GetRefCount() const { return m_pRefCount; }
 	int UseCount() const { return (m_pRefCount) ? (*m_pRefCount) : (0); }
 	void SetPtr(Type* pPtr) { m_pRawPtr = pPtr; }

@@ -1,7 +1,13 @@
 #pragma once
+// WeakPtr pointer implementation by Zixuan Shi
 
 #include "SharedPtr.h"
 
+//--------------------------------------------------------------------------------------------------------------------
+// std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. 
+// It must be converted to std::shared_ptr in order to access the referenced object.
+// https://en.cppreference.com/w/cpp/memory/weak_ptr
+//--------------------------------------------------------------------------------------------------------------------
 template<typename Type, typename Deleter = std::default_delete<Type>>
 class WeakPtr
 {
@@ -88,7 +94,7 @@ inline WeakPtr<Type, Deleter>& WeakPtr<Type, Deleter>::operator=(WeakPtr&& other
 
 template<typename Type, typename Deleter>
 inline WeakPtr<Type, Deleter>::WeakPtr(const SharedPtr<Type, Deleter>& sharedPtr)
-	: m_pRawPtr{ sharedPtr.GetPtr() }
+	: m_pRawPtr{ sharedPtr.GetRawPtr() }
 	, m_pRefCount{ sharedPtr.GetRefCount() }
 {
 }
@@ -96,14 +102,14 @@ inline WeakPtr<Type, Deleter>::WeakPtr(const SharedPtr<Type, Deleter>& sharedPtr
 template<typename Type, typename Deleter>
 inline WeakPtr<Type, Deleter>& WeakPtr<Type, Deleter>::operator=(const SharedPtr<Type, Deleter>& sharedPtr)
 {
-	m_pRawPtr = sharedPtr.GetPtr();
+	m_pRawPtr = sharedPtr.GetRawPtr();
 	m_pRefCount = sharedPtr.GetRefCount();
 	return *this;
 }
 
 template<typename Type, typename Deleter>
 inline WeakPtr<Type, Deleter>::WeakPtr(SharedPtr<Type, Deleter>&& sharedPtr)
-	: m_pRawPtr{ sharedPtr.GetPtr() }
+	: m_pRawPtr{ sharedPtr.GetRawPtr() }
 	, m_pRefCount{ sharedPtr.GetRefCount() }
 {
 	sharedPtr.Clear();
@@ -112,7 +118,7 @@ inline WeakPtr<Type, Deleter>::WeakPtr(SharedPtr<Type, Deleter>&& sharedPtr)
 template<typename Type, typename Deleter>
 inline WeakPtr<Type, Deleter>& WeakPtr<Type, Deleter>::operator=(SharedPtr<Type, Deleter>&& sharedPtr)
 {
-	m_pRawPtr = sharedPtr.GetPtr();
+	m_pRawPtr = sharedPtr.GetRawPtr();
 	m_pRefCount = sharedPtr.GetRefCount();
 
 	sharedPtr.Clear();
@@ -120,18 +126,30 @@ inline WeakPtr<Type, Deleter>& WeakPtr<Type, Deleter>::operator=(SharedPtr<Type,
 	return *this;
 }
 
+//--------------------------------------------------------------------------------------------------------------------
+// Returns the number of shared_ptr objects that manage the object
+//--------------------------------------------------------------------------------------------------------------------
 template<typename Type, typename Deleter>
 inline int WeakPtr<Type, Deleter>::UseCount() const
 {
-	return (m_pRefCount) ? (*m_pRefCount) : (0);
+	if (m_pRefCount && *m_pRefCount > 0)
+		return *m_pRefCount;
+
+	return 0;
 }
 
+//--------------------------------------------------------------------------------------------------------------------
+// Checks whether the referenced object was already deleted
+//--------------------------------------------------------------------------------------------------------------------
 template<typename Type, typename Deleter>
 inline bool WeakPtr<Type, Deleter>::Expired() const
 {
 	return UseCount() == 0;
 }
 
+//--------------------------------------------------------------------------------------------------------------------
+// Creates a new std::shared_ptr that shares ownership of the managed object.
+//--------------------------------------------------------------------------------------------------------------------
 template<typename Type, typename Deleter>
 inline SharedPtr<Type, Deleter> WeakPtr<Type, Deleter>::Lock() const
 {

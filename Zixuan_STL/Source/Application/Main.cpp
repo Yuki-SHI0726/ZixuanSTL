@@ -94,37 +94,11 @@ int main()
 
 	std::cout << pWeakFoo.UseCount() << std::endl;
 
-
-	//std::weak_ptr<Actor> pWeakFoo;
-	//{
-	//	std::cout << pWeakFoo.use_count() << std::endl;
-	//	{
-	//		std::shared_ptr<Actor> pBar = std::make_shared<Actor>(10);
-
-	//		pWeakFoo = pBar;
-
-	//		if (!pWeakFoo.expired())
-	//		{
-	//			pWeakFoo.lock()->Work(Func);
-	//			std::cout << pWeakFoo.use_count() << std::endl;
-	//		}
-	//	}
-
-	//	std::cout << pWeakFoo.use_count() << std::endl;
-	//}
-	//if (!pWeakFoo.expired())
-	//{
-	//	pWeakFoo.lock()->Work(Func);
-	//}
-
-	//std::cout << pWeakFoo.use_count() << std::endl;
-
 	return 0;
 }
 
 /*
 * TODO list:
-* - Implement Smart Ptrs
 * - UnorderedArray: Iterator
 * - Graph: Jump Point Search
 * - Vector3: refactor
