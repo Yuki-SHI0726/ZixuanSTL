@@ -104,7 +104,7 @@ inline void StackArray<Type>::Test()
 	system("cls");
 
 	// Create array
-	StackArray<Value> stackArray{ i };
+	StackArray<Type> stackArray{ i };
 #endif
 
 	// Loop work

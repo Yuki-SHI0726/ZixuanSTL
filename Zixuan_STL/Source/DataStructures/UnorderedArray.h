@@ -634,7 +634,7 @@ inline void UnorderedArray<Type>::Test()
     system("cls");
 
     // Create array
-    UnorderedArray<Value> unorderedArray{ (size_t)i };
+    UnorderedArray<Type> unorderedArray{ (size_t)i };
 #endif
 
     // Loop work

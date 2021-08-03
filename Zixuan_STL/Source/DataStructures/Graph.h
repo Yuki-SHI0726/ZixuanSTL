@@ -17,12 +17,12 @@
 
 //--------------------------------------------------------------------------------------------------------------------
 // Custom Graph class supporting the following operations
-//	- BFS
-//	- DFS
-//	- Dijkstra's Algorithm
-//	- A*
-//	- Transpose
-//  - In/Out Degree
+// - BFS
+// - DFS
+// - Dijkstra's Algorithm
+// - A*
+// - Transpose
+// - In/Out Degree
 //--------------------------------------------------------------------------------------------------------------------
 template <class Type>
 class Graph

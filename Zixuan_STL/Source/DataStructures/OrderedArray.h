@@ -290,7 +290,7 @@ inline void OrderedArray<Type>::Test()
     system("cls");
 
     // Create array
-    OrderedArray<Value> orderedArray{ i, (operationInput == '1') };
+    OrderedArray<Type> orderedArray{ i, (operationInput == '1') };
 #endif
 
     // Loop work

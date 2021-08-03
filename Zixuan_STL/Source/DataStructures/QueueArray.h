@@ -178,7 +178,7 @@ inline void QueueArray<Type>::Test()
 	system("cls");
 
 	// Create array
-	QueueArray<Value> queueArray{ i };
+	QueueArray<Type> queueArray{ i };
 #endif
 
 	// Loop work

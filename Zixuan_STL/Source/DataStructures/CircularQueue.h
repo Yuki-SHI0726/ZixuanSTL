@@ -211,7 +211,7 @@ inline void CircularQueue<Type>::Test()
 	system("cls");
 
 	// Create array
-	CircularQueue<Value> circularQueue{ i };
+	CircularQueue<Type> circularQueue{ i };
 #endif
 
 	// Loop work
