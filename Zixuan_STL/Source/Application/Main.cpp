@@ -73,10 +73,12 @@ void Func(int data, int* pPtr)
 
 int main()
 {
+	// Weak pointer test
 	WeakPtr<Actor> pWeakFoo;
 	{
 		std::cout << pWeakFoo.UseCount() << std::endl;
 		{
+			// Shared pointer test
 			SharedPtr<Actor> pBar = SharedPtr<Actor>::Make(10);
 
 			pWeakFoo = pBar;
@@ -93,6 +95,11 @@ int main()
 		pWeakFoo.Lock()->Work(Func);
 
 	std::cout << pWeakFoo.UseCount() << std::endl;
+
+	// Unique pointer test
+	Actor* pActor = new Actor(10);
+	UniquePtr<Actor> pUniqueActor = pActor;
+	pUniqueActor->Work(Func);
 
 	return 0;
 }

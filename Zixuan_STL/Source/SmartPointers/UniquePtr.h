@@ -13,7 +13,7 @@ private:
 	Type* m_pRawPtr;
 
 public:
-	// Disallow default and copy assign
+	// Disallow copy construct and assign 
 	UniquePtr(const UniquePtr& other) = delete;
 	UniquePtr& operator=(const UniquePtr& other) = delete;
 
@@ -86,6 +86,5 @@ template<typename Type, typename Deleter>
 template<class ...Args>
 inline UniquePtr<Type, Deleter> UniquePtr<Type, Deleter>::Make(Args && ...args)
 {
-	Type* pPtr = new Type(std::forward<Args>(args)...);
-	return UniquePtr(pPtr);
+	return UniquePtr(new Type(std::forward<Args>(args)...));
 }
