@@ -1,6 +1,6 @@
 #include "StructureManager.h"
 
-#include "UnorderedArray.h"
+#include "vector.h"
 #include "OrderedArray.h"
 #include "StackArray.h"
 #include "QueueArray.h"

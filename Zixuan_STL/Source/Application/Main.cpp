@@ -1,20 +1,20 @@
 #include "Utils/StructureManager.h"
 
-#include "UnorderedArray.h"
+#include "vector.h"
 #include "OrderedArray.h"
 #include "StackArray.h"
 #include "QueueArray.h"
-#include "LinkedList.h"
+#include "list.h"
 #include "StackList.h"
 #include "QueueList.h"
 #include "CircularQueue.h"
-#include "HashTable.h"
+#include "unordered_map.h"
 #include "BinarySearchTree.h"
 #include "RedBlackTree.h"
 #include "Graph.h"
-#include "SmartPointers/UniquePtr.h"
-#include "SmartPointers/SharedPtr.h"
-#include "SmartPointers/WeakPtr.h"
+#include "SmartPointers/unique_ptr.h"
+#include "SmartPointers/shared_ptr.h"
+#include "SmartPointers/weak_ptr.h"
 #include "Helpers.h"
 #include "Math/Vector3.h"
 #include "Actor/Actor.h"
@@ -39,7 +39,7 @@ bool Run()
 
 	// Do work
 	if (input == "0")
-		UnorderedArray<int>::Test();
+		vector<int>::Test();
 	else if (input == "1")
 		OrderedArray<int>::Test();
 	else if (input == "2")
@@ -47,7 +47,7 @@ bool Run()
 	else if (input == "3")
 		QueueArray<int>::Test();
 	else if (input == "4")
-		LinkedList<int>::Test();
+		list<int>::Test();
 	else if (input == "5")
 		StackList<int>::Test();
 	else if (input == "6")
@@ -55,7 +55,7 @@ bool Run()
 	else if (input == "7")
 		CircularQueue<int>::Test();
 	else if (input == "8")
-		HashTable<int, int>::Test();
+		unordered_map<int, int>::Test();
 	else if (input == "9")
 		BinarySearchTree<int, int>::Test();
 	else if (input == "10")
@@ -73,33 +73,7 @@ void Func(int data, int* pPtr)
 
 int main()
 {
-	// Weak pointer test
-	WeakPtr<Actor> pWeakFoo;
-	{
-		std::cout << pWeakFoo.UseCount() << std::endl;
-		{
-			// Shared pointer test
-			SharedPtr<Actor> pBar = SharedPtr<Actor>::Make(10);
 
-			pWeakFoo = pBar;
-
-			if (!pWeakFoo.Expired())
-				pWeakFoo.Lock()->Work(Func);
-
-			std::cout << pWeakFoo.UseCount() << std::endl;
-		}
-
-		std::cout << pWeakFoo.UseCount() << std::endl;
-	}
-	if (!pWeakFoo.Expired())
-		pWeakFoo.Lock()->Work(Func);
-
-	std::cout << pWeakFoo.UseCount() << std::endl;
-
-	// Unique pointer test
-	Actor* pActor = new Actor(10);
-	UniquePtr<Actor> pUniqueActor = pActor;
-	pUniqueActor->Work(Func);
 
 	return 0;
 }

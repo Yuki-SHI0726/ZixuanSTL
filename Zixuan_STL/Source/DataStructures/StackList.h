@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LinkedList.h"
+#include "list.h"
 
 //--------------------------------------------------------------------------------------------------------------------
 // Stack implemented by Linkedlist
@@ -9,7 +9,7 @@ template<class Type>
 class StackList
 {
 private:
-	LinkedList<Type> m_stackList;
+	list<Type> m_stackList;
 	
 	// Top is alwasy list's Head
 

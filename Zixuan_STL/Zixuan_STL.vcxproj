@@ -20,12 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Main.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorld.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\GraphMain.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\Tech.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTree.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.cpp" />
-    <ClCompile Include="Source\RealWorldProblems\Graph\TechTree\TechTreeMain.cpp" />
     <ClCompile Include="Source\Utils\ECS\Actor\Actor.cpp" />
     <ClCompile Include="Source\Utils\ECS\Components\ComponentBase.cpp" />
     <ClCompile Include="Source\Utils\ECS\Components\HealthComponent.cpp" />
@@ -37,24 +31,18 @@
     <ClInclude Include="Source\DataStructures\BinarySearchTree.h" />
     <ClInclude Include="Source\DataStructures\CircularQueue.h" />
     <ClInclude Include="Source\DataStructures\Graph.h" />
-    <ClInclude Include="Source\DataStructures\HashTable.h" />
-    <ClInclude Include="Source\DataStructures\LinkedList.h" />
+    <ClInclude Include="Source\DataStructures\unordered_map.h" />
+    <ClInclude Include="Source\DataStructures\list.h" />
     <ClInclude Include="Source\DataStructures\OrderedArray.h" />
     <ClInclude Include="Source\DataStructures\QueueArray.h" />
     <ClInclude Include="Source\DataStructures\QueueList.h" />
     <ClInclude Include="Source\DataStructures\RedBlackTree.h" />
     <ClInclude Include="Source\DataStructures\StackArray.h" />
     <ClInclude Include="Source\DataStructures\StackList.h" />
-    <ClInclude Include="Source\DataStructures\UnorderedArray.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorld.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\FindTile\FindTileWorldConstants.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\Tech.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTree.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeBase.h" />
-    <ClInclude Include="Source\RealWorldProblems\Graph\TechTree\TechTreeConstants.h" />
-    <ClInclude Include="Source\SmartPointers\SharedPtr.h" />
-    <ClInclude Include="Source\SmartPointers\UniquePtr.h" />
-    <ClInclude Include="Source\SmartPointers\WeakPtr.h" />
+    <ClInclude Include="Source\DataStructures\vector.h" />
+    <ClInclude Include="Source\SmartPointers\shared_ptr.h" />
+    <ClInclude Include="Source\SmartPointers\unique_ptr.h" />
+    <ClInclude Include="Source\SmartPointers\weak_ptr.h" />
     <ClInclude Include="Source\Utils\ECS\Actor\Actor.h" />
     <ClInclude Include="Source\Utils\ECS\Actor\TActor.h" />
     <ClInclude Include="Source\Utils\ECS\Components\ComponentBase.h" />

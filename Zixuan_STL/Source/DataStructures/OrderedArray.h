@@ -220,6 +220,8 @@ inline void OrderedArray<Type>::Print() const
 
 //--------------------------------------------------------------------------------------------------------------------
 // Reverse the ordering method in array
+// Time:  O(n/2)
+// Spcae: O(1)
 //--------------------------------------------------------------------------------------------------------------------
 template<class Type>
 inline void OrderedArray<Type>::Reverse()
@@ -480,12 +482,11 @@ inline std::optional<size_t> OrderedArray<Type>::BinarySearch(const Type& val, s
     // Get mid point
     const size_t midPointIndex = (start + end) / 2;
 
-    // Recursively call this function
     // If mid point index is the value we are looking for, return the index of mid point index
     if (pTypeArray[midPointIndex] == val)
         return midPointIndex;
 
-    // If can't find it after log(n) times
+    // If can't find it after log(n) times, return empty
     else if (start == end)
         return {};
 

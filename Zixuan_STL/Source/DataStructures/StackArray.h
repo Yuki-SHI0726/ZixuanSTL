@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UnorderedArray.h"
+#include "vector.h"
 
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -10,7 +10,7 @@ template<class Type>
 class StackArray
 {
 private:
-	UnorderedArray<Type> m_unorderedArray;
+	vector<Type> m_unorderedArray;
 
 public:
 	StackArray();
@@ -46,7 +46,7 @@ template<class Type>
 inline void StackArray<Type>::Push(const Type& val)
 {
 	assert(m_unorderedArray.GetSize() < kInitialCapacity && "Error: Stack Overflow!");
-	m_unorderedArray.PushBack(val);
+	m_unorderedArray.push_back(val);
 }
 
 template<class Type>
@@ -58,7 +58,7 @@ inline void StackArray<Type>::Print() const
 template<class Type>
 inline void StackArray<Type>::Clear()
 {
-	m_unorderedArray.Clear();
+	m_unorderedArray.clear();
 }
 
 template<class Type>

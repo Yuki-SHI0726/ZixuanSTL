@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LinkedList.h"
+#include "list.h"
 
 //--------------------------------------------------------------------------------------------------------------------
 // Queue implemented by Linkedlist
@@ -9,7 +9,7 @@ template<class Type>
 class QueueList
 {
 private:
-	LinkedList<Type> m_queueList;
+	list<Type> m_queueList;
 
 	// Head is always list's Head
 	// Tail is always list's tail
