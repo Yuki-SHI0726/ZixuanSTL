@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-#define LOG 1
+#define LOG 0
 
 
 Actor::Actor()

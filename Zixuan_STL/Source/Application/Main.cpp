@@ -26,6 +26,8 @@
 #include <memory>
 #include <functional>
 
+// STL
+
 bool Run()
 {
 	// Get array choice input
@@ -39,7 +41,7 @@ bool Run()
 
 	// Do work
 	if (input == "0")
-		vector<int>::Test();
+		vector<int>::InteractiveTest();
 	else if (input == "1")
 		OrderedArray<int>::Test();
 	else if (input == "2")
@@ -73,17 +75,52 @@ void Func(int data, int* pPtr)
 
 int main()
 {
+	// stl
+	{
+		std::vector<int> stlVec;
+		stlVec.emplace_back(0);
+		stlVec.emplace_back(1);
+		stlVec.emplace_back(2);
 
+		stlVec.insert(stlVec.begin(), 1);
+
+
+		//for (size_t i = 0; i < stlVec.size(); ++i)
+		//	std::cout << stlVec.at(i) << std::endl;
+	}
+	std::cout << "---------------------------------------------\n";
+	// zxstl
+	{
+		//vector<int>::UnitTest();
+		vector<int> zxVec;
+		zxVec.insert(0, 0);
+		zxVec.insert(1, 1);
+		zxVec.insert(2, 2);
+		zxVec.insert(2, 3);
+		zxVec.insert(0, 3);
+		zxVec.emplace(1, 4);
+		zxVec.emplace(3, 5);
+		zxVec.Print();
+		zxVec.resize(10);
+		zxVec.Print();
+		//zxVec.resize(2);
+		//zxVec.Print();
+
+		vector<int> zxVec2;
+		zxVec.swap(zxVec2);
+		zxVec2.Print();
+	}
 
 	return 0;
 }
 
 /*
 * TODO list:
-* - UnorderedArray: Iterator
+* - deque
+* - Priority Queue
+* - vector: Iterator, insert
 * - Graph: Jump Point Search
 * - Vector3: refactor
-* - Priority Queue
 */
 
 

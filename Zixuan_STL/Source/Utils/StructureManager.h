@@ -2,7 +2,14 @@
 
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
+// Used for unit tests
+#define RETURN_ERROR(reason)\
+	std::cout << "Unit test failed at: " << reason << std::endl;\
+	return false;
+
+static constexpr size_t kTestSize = 50;
 static constexpr size_t kInitialCapacity = 10;   // Default capacity for default ctor
 static constexpr size_t kExpandMultiplier = 2; // If the array is full, multiply the capacity to this number and create a new array
 

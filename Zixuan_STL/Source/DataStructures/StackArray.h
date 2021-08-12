@@ -22,9 +22,9 @@ public:
 	Type Pop();
 	Type& Top();
 	const Type& Top() const;
-	bool Empty() const { return m_unorderedArray.Empty(); }
-	size_t GetSize() const { return m_unorderedArray.GetSize(); }
-	size_t GetCapacity() const { return m_unorderedArray.GetCapacity(); }
+	bool Empty() const { return m_unorderedArray.empty(); }
+	size_t GetSize() const { return m_unorderedArray.size(); }
+	size_t GetCapacity() const { return m_unorderedArray.capacity(); }
 
 	// Test
 	static void Test();
@@ -45,7 +45,7 @@ inline StackArray<Type>::StackArray(size_t capacity)
 template<class Type>
 inline void StackArray<Type>::Push(const Type& val)
 {
-	assert(m_unorderedArray.GetSize() < kInitialCapacity && "Error: Stack Overflow!");
+	assert(m_unorderedArray.size() < kInitialCapacity && "Error: Stack Overflow!");
 	m_unorderedArray.push_back(val);
 }
 
@@ -65,14 +65,15 @@ template<class Type>
 inline Type StackArray<Type>::Pop()
 {
 	assert(!Empty() && "Error: Stack Underflow!");
-	return m_unorderedArray.PopBack();
+	m_unorderedArray.pop_back();
+	return Type();
 }
 
 template<class Type>
 inline Type& StackArray<Type>::Top()
 {
 	assert(!Empty() && "Error: Stack has no element!");
-	return m_unorderedArray[m_unorderedArray.GetSize() - 1];
+	return m_unorderedArray[m_unorderedArray.size() - 1];
 }
 
 template<class Type>
