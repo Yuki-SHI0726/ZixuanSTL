@@ -20,7 +20,7 @@ public:
 	void Print() const;
 	void Clear() { m_stackList.Clear(); }
 	Type Pop() { return m_stackList.PopFront(); }
-	Type Top() const { return m_stackList.Head()->GetValue(); }
+	Type& Top() { return m_stackList.front(); }
 	bool Empty() const { return m_stackList.Empty(); }
 	size_t GetSize() const { return m_stackList.GetSize(); }
 	

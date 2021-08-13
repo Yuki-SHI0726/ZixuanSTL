@@ -21,8 +21,8 @@ public:
 	Type Dequeue() { return m_queueList.PopFront(); }
 	void Print() const;
 	void Clear() { m_queueList.Clear(); }
-	Type Head() const { return m_queueList.Head()->GetValue(); }
-	Type Tail() const { return m_queueList.Tail()->GetValue(); }
+	Type& Head() { return m_queueList.front(); }
+	Type& Tail() { return m_queueList.back(); }
 	bool Empty() const { return m_queueList.Empty(); }
 	size_t GetSize() const { return m_queueList.GetSize(); }
 

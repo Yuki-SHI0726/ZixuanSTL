@@ -49,9 +49,20 @@ private:
 	size_t m_size;
 	
 public:
+	// Member functions
 	list();
 	~list();
 
+	// Element access
+	constexpr Type& front() { return m_pHead->m_value; }
+	constexpr const Type& front() const { return m_pHead->m_value; }
+	constexpr Type& back() { return m_pTail->m_value; }
+	constexpr const Type& back() const { return m_pTail->m_value; }
+
+	// Iterators
+	// TODO
+
+	// Capacity
 	void PushFront(const Type& val);
 	void PushBack(const Type& val);
 	void Insert(size_t index, const Type& val);
@@ -66,9 +77,7 @@ public:
 	// API
 	bool Empty() const { return m_size <= 0; }
 	size_t GetSize() const { return m_size; }
-	Node* Head() const { return m_pHead; }
 	Type HeadValue() const { return m_pHead->GetValue(); }
-	Node* Tail() const { return m_pTail; }
 	Type TailValue() const { return m_pTail->GetValue(); }
 	void Reverse(size_t begin = 0, size_t end = std::numeric_limits<size_t>::max());	
 	void Sort();

@@ -19,26 +19,89 @@
 // 2 = last element
 #define PIVOT_PICK 1
 
+template<typename Vector>
+class vector_iterator
+{
+public:
+    using ValueType = typename Vector::ValueType;
+
+private:
+    ValueType* m_ptr;
+
+public:
+    // Member functions
+    constexpr vector_iterator(ValueType* ptr);
+
+    vector_iterator& operator++();
+    vector_iterator operator++(int);
+    vector_iterator& operator--();
+    vector_iterator operator--(int);
+    ValueType& operator[](size_t index) { return *(m_ptr + index); }
+    ValueType* operator->() { return m_ptr; }
+    ValueType& operator*() { return *m_ptr; }
+    bool operator==(const vector_iterator& other) const { return m_ptr == other.m_ptr; }
+    bool operator!=(const vector_iterator& other) const { return m_ptr != other.m_ptr; }
+};
+
+template<typename Vector>
+inline constexpr vector_iterator<Vector>::vector_iterator(ValueType* ptr)
+    : m_ptr{ ptr }
+{
+}
+
+template<typename Vector>
+inline vector_iterator<Vector>& vector_iterator<Vector>::operator++()
+{
+    m_ptr++;
+    return *this;
+}
+
+template<typename Vector>
+inline vector_iterator<Vector> vector_iterator<Vector>::operator++(int)
+{
+    vector_iterator iterator = *this;
+    ++(*this);
+    return iterator;
+}
+
+template<typename Vector>
+inline vector_iterator<Vector>& vector_iterator<Vector>::operator--()
+{
+    m_ptr--;
+    return *this;
+}
+
+template<typename Vector>
+inline vector_iterator<Vector> vector_iterator<Vector>::operator--(int)
+{
+    vector_iterator iterator = *this;
+    --(*this);
+    return iterator;
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Unorded array class
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
 class vector
 {
+public:
+    using ValueType = Type;
+    using iterator = vector_iterator<vector<Type>>;
+
 private:
     std::byte* m_pBuffer;
-
-    size_t m_capacity; // was m_maxSize  
-    size_t m_size;     // was m_numElements
+    size_t m_capacity; 
+    size_t m_size;    
 
 public:
     // Member functions
-    vector(size_t capacity = kInitialCapacity);
-    vector(const vector& other);
-    vector(vector&& other) noexcept;
-    vector& operator=(const vector& other);
-    vector& operator=(vector&& other) noexcept;
-    ~vector();
+    constexpr vector(size_t capacity = kInitialCapacity);
+    constexpr vector(const vector& other);
+    constexpr vector(vector&& other) noexcept;
+    constexpr vector& operator=(const vector& other);
+    constexpr vector& operator=(vector&& other) noexcept;
+    constexpr ~vector();
 
     // Element access
     constexpr Type& at(size_t index);
@@ -53,7 +116,12 @@ public:
     constexpr const Type* data() const noexcept { return reinterpret_cast<Type*>(m_pBuffer); }
     
     // Iterators
-    // TODO
+    constexpr iterator begin() noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer)); }
+    constexpr const iterator begin() const noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer)); }
+    constexpr const iterator cbegin() const noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer)); }
+    constexpr iterator end() noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer) + m_size); }
+    constexpr const iterator end() const noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer) + m_size); }
+    constexpr const iterator cend() const noexcept { return iterator(reinterpret_cast<Type*>(m_pBuffer) + m_size); }
 
     // Capacity
     constexpr bool empty() const noexcept { return m_size <= 0; }
@@ -96,13 +164,13 @@ public:
     static bool UnitTest();
 
 private:
-    void UpdateBufferWithNewCapacity(size_t newCapacity);
-    void Destroy();
-    void QuickSort(size_t start, size_t end);
-    size_t Partition(size_t start, size_t end);
+    void _update_buffer_with_new_capacity(size_t newCapacity);
+    void _destroy();
+    void _internal_quicksort(size_t start, size_t end);
+    size_t _partition(size_t start, size_t end);
 
 #if PIVOT_PICK == 1
-    size_t GetMidIndex(size_t start, size_t end) const;
+    size_t _get_mid_index(size_t start, size_t end) const;
 #endif
 };
 
@@ -110,22 +178,22 @@ private:
 // Ctor, takes in the size of the array and dynamically allocate in the ctor
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>::vector(size_t capacity /*= kInitialCapacity*/)
+constexpr vector<Type>::vector(size_t capacity /*= kInitialCapacity*/)
     : m_pBuffer(nullptr)
     , m_capacity(capacity)
     , m_size(0)
 {
     assert(m_capacity >= 0);
-    UpdateBufferWithNewCapacity(m_capacity);
+    _update_buffer_with_new_capacity(m_capacity);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Copy ctor
 // Time:  O(n)
-// Space: O(1)
+// Space: O(n)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>::vector(const vector& other)
+constexpr vector<Type>::vector(const vector& other)
     : m_pBuffer(nullptr)
     , m_capacity(other.m_capacity)
     , m_size(other.m_size)
@@ -146,11 +214,9 @@ inline vector<Type>::vector(const vector& other)
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Move ctor
-// Time:  O(1)
-// Space: O(1)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>::vector(vector&& other) noexcept
+constexpr vector<Type>::vector(vector&& other) noexcept
     : m_pBuffer(other.m_pBuffer)
     , m_capacity(other.m_capacity)
     , m_size(other.m_size)
@@ -163,10 +229,10 @@ inline vector<Type>::vector(vector&& other) noexcept
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Move ctor
 // Time:  O(n)
-// Space: O(1)
+// Space: O(n)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>& vector<Type>::operator=(const vector& other)
+constexpr vector<Type>& vector<Type>::operator=(const vector& other)
 {
     // Edge-case checking
     if (this == &other)
@@ -199,11 +265,9 @@ inline vector<Type>& vector<Type>::operator=(const vector& other)
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Move ctor
-// Time:  O(1)
-// Space: O(1)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>& vector<Type>::operator=(vector&& other) noexcept
+constexpr vector<Type>& vector<Type>::operator=(vector&& other) noexcept
 {
     // Edge-case checking
     if (this == &other)
@@ -229,9 +293,9 @@ inline vector<Type>& vector<Type>::operator=(vector&& other) noexcept
 // The destructor will need to clean up and deallocate any memory that was allocated in the constructor.
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline vector<Type>::~vector()
+constexpr vector<Type>::~vector()
 {
-    Destroy();
+    _destroy();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -328,7 +392,7 @@ template<class Type>
 inline constexpr void vector<Type>::reserve(size_t newCapacity)
 {
     if (newCapacity > m_capacity)
-        UpdateBufferWithNewCapacity(newCapacity);
+        _update_buffer_with_new_capacity(newCapacity);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -338,7 +402,7 @@ inline constexpr void vector<Type>::reserve(size_t newCapacity)
 template<class Type>
 inline constexpr void vector<Type>::shrink_to_fit()
 {
-    UpdateBufferWithNewCapacity(m_size);
+    _update_buffer_with_new_capacity(m_size);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -349,7 +413,7 @@ inline constexpr void vector<Type>::shrink_to_fit()
 template<class Type>
 constexpr void vector<Type>::clear() noexcept
 {
-    Destroy();
+    _destroy();
     m_size = 0;
 }
 
@@ -363,7 +427,7 @@ inline constexpr void vector<Type>::insert(size_t index, const Type& val)
     assert(index <= m_size);
 
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
@@ -384,7 +448,7 @@ inline constexpr void vector<Type>::insert(size_t index, Type&& val)
     assert(index <= m_size);
 
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
@@ -406,7 +470,7 @@ inline constexpr void vector<Type>::emplace(size_t index, Args&&... args)
     assert(index <= m_size);
 
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
@@ -445,7 +509,7 @@ template<class Type>
 constexpr void vector<Type>::push_back(const Type& val)
 {
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
     ++m_size;
@@ -459,7 +523,7 @@ template<class Type>
 constexpr void vector<Type>::push_back(Type&& val)
 {
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
     ++m_size;
@@ -476,7 +540,7 @@ constexpr void vector<Type>::push_front(const Type& val)
 {
     // If the array is full, expand it
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -500,7 +564,7 @@ constexpr void vector<Type>::push_front(Type&& val)
 {    
     // If the array is full, expand it
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity * kExpandMultiplier);
+        _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -521,7 +585,7 @@ template<class ...Args>
 constexpr void vector<Type>::emplace_back(Args&& ...args)
 {
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
+        _update_buffer_with_new_capacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(std::forward<Args>(args)...);
     ++m_size;
@@ -538,7 +602,7 @@ template<class ...Args>
 constexpr void vector<Type>::emplace_front(Args&& ...args)
 {
     if (m_size >= m_capacity)
-        UpdateBufferWithNewCapacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
+        _update_buffer_with_new_capacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -582,7 +646,7 @@ inline constexpr void vector<Type>::resize(size_t count)
                 pTypeArray[i].~Type();
         }
 
-        UpdateBufferWithNewCapacity(count);
+        _update_buffer_with_new_capacity(count);
     }
     // Size is less than count, add default values to the end of the buffer
     else
@@ -732,7 +796,7 @@ inline void vector<Type>::InsertionSort()
 template<class Type>
 inline void vector<Type>::QuickSort()
 {
-    QuickSort(0, m_size - 1);
+    _internal_quicksort(0, m_size - 1);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -741,13 +805,13 @@ inline void vector<Type>::QuickSort()
 // Space: O(1)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline void vector<Type>::QuickSort(size_t start, size_t end)
+inline void vector<Type>::_internal_quicksort(size_t start, size_t end)
 {
     if (start < end && end != std::numeric_limits<size_t>::max())
     {
-        size_t pivotIndex = Partition(start, end);
-        QuickSort(start, pivotIndex - 1);
-        QuickSort(pivotIndex + 1, end);
+        size_t pivotIndex = _partition(start, end);
+        _internal_quicksort(start, pivotIndex - 1);
+        _internal_quicksort(pivotIndex + 1, end);
     }
 }
 
@@ -900,7 +964,7 @@ inline bool vector<Type>::UnitTest()
 // Create a bigger array, update capacity, copy and move elements from previous array to the new one
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline void vector<Type>::UpdateBufferWithNewCapacity(size_t newCapacity)
+inline void vector<Type>::_update_buffer_with_new_capacity(size_t newCapacity)
 {
     const size_t newBufferSize = newCapacity * sizeof(Type);
     std::byte* pNewBuffer = new std::byte[newBufferSize];
@@ -923,7 +987,7 @@ inline void vector<Type>::UpdateBufferWithNewCapacity(size_t newCapacity)
 // Space: O(1)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline void vector<Type>::Destroy()
+inline void vector<Type>::_destroy()
 {
     // If the type of elements is not trivially destructible, call it's destructor
     if constexpr (!std::is_trivially_destructible_v<Type>)
@@ -938,7 +1002,7 @@ inline void vector<Type>::Destroy()
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Partition algorithm for QuickSort
+// _partition algorithm for QuickSort
 // The array is divided into four regions.  They are:
 //		1) <= pivot, from 0 to i
 //		2) > pivot, from i to j 
@@ -946,7 +1010,7 @@ inline void vector<Type>::Destroy()
 //		4) pivot
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline size_t vector<Type>::Partition(size_t start, size_t end)
+inline size_t vector<Type>::_partition(size_t start, size_t end)
 {
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
@@ -958,7 +1022,7 @@ inline size_t vector<Type>::Partition(size_t start, size_t end)
 #elif (PIVOT_PICK == 1)    // Median of Three
     // examines the first, middle, and last elements of the array, find the middle's index
     // the value that is in the middle gets swapped with the last element
-    Swap(pTypeArray[GetMidIndex(start, end)], pTypeArray[end]);
+    Swap(pTypeArray[_get_mid_index(start, end)], pTypeArray[end]);
 
 #endif
 
@@ -983,7 +1047,7 @@ inline size_t vector<Type>::Partition(size_t start, size_t end)
     size_t pivotIndex = i + 1;
     Swap(pTypeArray[pivotIndex], pTypeArray[end]);
 
-    // return the pivot, which becomes the beginning and end points of the next calls to Partition().
+    // return the pivot, which becomes the beginning and end points of the next calls to _partition().
     return pivotIndex;
 }
 
@@ -992,7 +1056,7 @@ inline size_t vector<Type>::Partition(size_t start, size_t end)
 // Helper function for Median of three QuickSort
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline size_t vector<Type>::GetMidIndex(size_t start, size_t end) const
+inline size_t vector<Type>::_get_mid_index(size_t start, size_t end) const
 {
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
@@ -1022,4 +1086,3 @@ inline size_t vector<Type>::GetMidIndex(size_t start, size_t end) const
     }
 }
 #endif
-

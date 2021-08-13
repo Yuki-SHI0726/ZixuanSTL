@@ -82,33 +82,19 @@ int main()
 		stlVec.emplace_back(1);
 		stlVec.emplace_back(2);
 
-		stlVec.insert(stlVec.begin(), 1);
-
-
-		//for (size_t i = 0; i < stlVec.size(); ++i)
-		//	std::cout << stlVec.at(i) << std::endl;
+		for (std::vector<int>::iterator iterator = stlVec.begin(); iterator != stlVec.end(); ++iterator)
+			std::cout << *iterator << std::endl;
 	}
 	std::cout << "---------------------------------------------\n";
 	// zxstl
 	{
-		//vector<int>::UnitTest();
 		vector<int> zxVec;
-		zxVec.insert(0, 0);
-		zxVec.insert(1, 1);
-		zxVec.insert(2, 2);
-		zxVec.insert(2, 3);
-		zxVec.insert(0, 3);
-		zxVec.emplace(1, 4);
-		zxVec.emplace(3, 5);
-		zxVec.Print();
-		zxVec.resize(10);
-		zxVec.Print();
-		//zxVec.resize(2);
-		//zxVec.Print();
+		zxVec.emplace_back(0);
+		zxVec.emplace_back(1);
+		zxVec.emplace_back(2);
 
-		vector<int> zxVec2;
-		zxVec.swap(zxVec2);
-		zxVec2.Print();
+		for (vector<int>::iterator iterator = zxVec.begin(); iterator != zxVec.end(); ++iterator)
+			std::cout << *iterator << std::endl;
 	}
 
 	return 0;
@@ -118,7 +104,6 @@ int main()
 * TODO list:
 * - deque
 * - Priority Queue
-* - vector: Iterator, insert
 * - Graph: Jump Point Search
 * - Vector3: refactor
 */
