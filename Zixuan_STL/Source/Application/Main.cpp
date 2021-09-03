@@ -26,9 +26,7 @@
 #include <memory>
 #include <functional>
 
-// STL
-
-bool Run()
+bool RunInteractiveUnitTests()
 {
 	// Get array choice input
 	std::string input{ "" };
@@ -81,6 +79,7 @@ int main()
 		stlVec.emplace_back(0);
 		stlVec.emplace_back(1);
 		stlVec.emplace_back(2);
+		stlVec.insert(stlVec.begin() + 1, 5);
 
 		for (std::vector<int>::iterator iterator = stlVec.begin(); iterator != stlVec.end(); ++iterator)
 			std::cout << *iterator << std::endl;
@@ -102,6 +101,7 @@ int main()
 
 /*
 * TODO list:
+* - iterator_base
 * - deque
 * - Priority Queue
 * - Graph: Jump Point Search
@@ -116,6 +116,5 @@ int main()
 //while (!shouldQuit)
 //{
 //	StructureManager::Get().ShowStructures();
-//	shouldQuit = Run();
+//	shouldQuit = RunInteractiveUnitTests();
 //}
-//Actor* pActor = new Actor(10);

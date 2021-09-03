@@ -32,10 +32,12 @@ public:
     // Member functions
     constexpr vector_iterator(ValueType* ptr);
 
+    // Meant to be virtual
     vector_iterator& operator++();
     vector_iterator operator++(int);
     vector_iterator& operator--();
     vector_iterator operator--(int);
+
     ValueType& operator[](size_t index) { return *(m_ptr + index); }
     ValueType* operator->() { return m_ptr; }
     ValueType& operator*() { return *m_ptr; }
@@ -240,12 +242,11 @@ constexpr vector<Type>& vector<Type>::operator=(const vector& other)
 
     // Clean old buffer
     delete[] m_pBuffer;
-    m_pBuffer = other.m_pBuffer;
+    m_pBuffer = nullptr;
 
     // Copy everything over
     m_size = other.m_size;
     m_capacity = other.m_capacity;
-    other.m_pBuffer = nullptr;
 
     // If the other's buffer exists
     if (other.m_pBuffer)
@@ -1017,13 +1018,12 @@ inline size_t vector<Type>::_partition(size_t start, size_t end)
 #if (PIVOT_PICK == 0)    // Randomized element
     // choose a random index from the array 
     // replace the element at that index with the element at the last index of the array.
-    std::swap(pTypeArray[start + (rand() % (end - start))], pTypeArray[end]);
+    Swap(pTypeArray[start + (rand() % (end - start))], pTypeArray[end]);
 
 #elif (PIVOT_PICK == 1)    // Median of Three
     // examines the first, middle, and last elements of the array, find the middle's index
     // the value that is in the middle gets swapped with the last element
     Swap(pTypeArray[_get_mid_index(start, end)], pTypeArray[end]);
-
 #endif
 
     Type pivot = pTypeArray[end];    // Pivot element value
