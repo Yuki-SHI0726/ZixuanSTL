@@ -31,7 +31,8 @@ public:
 	// Alias
 	using NodeId = size_t;
 	using Dist = float;
-	using AdjacencyList = std::vector<std::map<NodeId, Dist>>;
+	using Edge = std::map<NodeId, Dist>;
+	using AdjacencyList = std::vector<Edge>;
 	static constexpr NodeId kInvalidNodeId = std::numeric_limits<NodeId>::max();
 	static constexpr Dist kStartDist = std::numeric_limits<Dist>::max();
 

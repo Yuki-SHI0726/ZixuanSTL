@@ -88,9 +88,8 @@ int main()
 	// zxstl
 	{
 		vector<int> zxVec;
-		zxVec.emplace_back(0);
-		zxVec.emplace_back(1);
-		zxVec.emplace_back(2);
+		zxVec.reserve(10);
+		zxVec.reserve(20);
 
 		for (vector<int>::iterator iterator = zxVec.begin(); iterator != zxVec.end(); ++iterator)
 			std::cout << *iterator << std::endl;

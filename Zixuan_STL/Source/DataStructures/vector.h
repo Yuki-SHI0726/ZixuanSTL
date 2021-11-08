@@ -970,12 +970,10 @@ inline void vector<Type>::_update_buffer_with_new_capacity(size_t newCapacity)
     const size_t newBufferSize = newCapacity * sizeof(Type);
     std::byte* pNewBuffer = new std::byte[newBufferSize];
 
+    // Is trivially copy able
     // if the current buffer has data, copy it over to our new buffer and deallocate
-    if (!empty())
-    {
-        std::memcpy(pNewBuffer, m_pBuffer, sizeof(Type) * m_size);
-        delete[] m_pBuffer;
-    }
+    std::memcpy(pNewBuffer, m_pBuffer, sizeof(Type) * m_size);
+    delete[] m_pBuffer;
 
     // point to the new buffer and set new capacity
     m_pBuffer = pNewBuffer;
