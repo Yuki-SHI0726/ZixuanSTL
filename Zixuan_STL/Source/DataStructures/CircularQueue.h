@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "Utils/StructureManager.h"
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // CircularQueue with a fixed size array.
 // Will wrap around by overriding elements which are already at the front of the queue when full 
@@ -284,3 +286,4 @@ inline void CircularQueue<Type>::Destroy()
 	}
 }
 
+}

@@ -39,29 +39,29 @@ bool RunInteractiveUnitTests()
 
 	// Do work
 	if (input == "0")
-		vector<int>::InteractiveTest();
+		zxstl::vector<int>::InteractiveTest();
 	else if (input == "1")
-		OrderedArray<int>::Test();
+		zxstl::OrderedArray<int>::Test();
 	else if (input == "2")
-		StackArray<char>::Test();
+		zxstl::StackArray<char>::Test();
 	else if (input == "3")
-		QueueArray<int>::Test();
+		zxstl::QueueArray<int>::Test();
 	else if (input == "4")
-		list<int>::Test();
+		zxstl::list<int>::Test();
 	else if (input == "5")
-		StackList<int>::Test();
+		zxstl::StackList<int>::Test();
 	else if (input == "6")
-		QueueList<int>::Test();
+		zxstl::QueueList<int>::Test();
 	else if (input == "7")
-		CircularQueue<int>::Test();
+		zxstl::CircularQueue<int>::Test();
 	else if (input == "8")
-		unordered_map<int, int>::Test();
+		zxstl::unordered_map<int, int>::Test();
 	else if (input == "9")
-		BinarySearchTree<int, int>::Test();
+		zxstl::BinarySearchTree<int, int>::Test();
 	else if (input == "10")
-		RedBlackTree<int, int>::Test();
+		zxstl::RedBlackTree<int, int>::Test();
 	else if (input == "11")
-		Graph<char>::Test();
+		zxstl::Graph<char>::Test();
 
 	return false;
 }
@@ -73,26 +73,13 @@ void Func(int data, int* pPtr)
 
 int main()
 {
-	// stl
-	{
-		std::vector<int> stlVec;
-		stlVec.emplace_back(0);
-		stlVec.emplace_back(1);
-		stlVec.emplace_back(2);
-		stlVec.insert(stlVec.begin() + 1, 5);
+	bool shouldQuit = false;
+	StructureManager::Get().Init();
 
-		for (std::vector<int>::iterator iterator = stlVec.begin(); iterator != stlVec.end(); ++iterator)
-			std::cout << *iterator << std::endl;
-	}
-	std::cout << "---------------------------------------------\n";
-	// zxstl
+	while (!shouldQuit)
 	{
-		vector<int> zxVec;
-		zxVec.reserve(10);
-		zxVec.reserve(20);
-
-		for (vector<int>::iterator iterator = zxVec.begin(); iterator != zxVec.end(); ++iterator)
-			std::cout << *iterator << std::endl;
+		StructureManager::Get().ShowStructures();
+		shouldQuit = RunInteractiveUnitTests();
 	}
 
 	return 0;
@@ -109,11 +96,3 @@ int main()
 
 
 
-//bool shouldQuit = false;
-//StructureManager::Get().Init();
-
-//while (!shouldQuit)
-//{
-//	StructureManager::Get().ShowStructures();
-//	shouldQuit = RunInteractiveUnitTests();
-//}

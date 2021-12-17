@@ -1,6 +1,8 @@
 #pragma once
 // Shared pointer implementation by Zixuan Shi
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. 
 // Several shared_ptr objects may own the same object. 
@@ -128,4 +130,6 @@ template<class ...Args>
 inline SharedPtr<Type, Deleter> SharedPtr<Type, Deleter>::Make(Args && ...args)
 {
 	return SharedPtr(new Type(std::forward<Args>(args)...));
+}
+
 }

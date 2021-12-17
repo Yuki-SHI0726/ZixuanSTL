@@ -6,6 +6,8 @@
 #include <string>
 #include <optional>
 
+namespace zxstl
+{
 //---------------------------------------------------------------------------------------------------------------------
 // Binary Search Tree Declaration
 //---------------------------------------------------------------------------------------------------------------------
@@ -734,4 +736,6 @@ void BinarySearchTree<KeyType, DataType>::RecursivePrintNodesInOrder(Node* pNode
 		std::cout << pNode->m_key << " => " << pNode->m_data << "\n";
 		RecursivePrintNodesInOrder(pNode->m_pRight);
 	}
+}
+
 }

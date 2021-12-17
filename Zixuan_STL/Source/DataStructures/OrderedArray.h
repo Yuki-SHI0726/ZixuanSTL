@@ -9,6 +9,8 @@
 #include <optional>
 #include <conio.h>
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // Ordered array class, I didn't make it derived from UnorderedArray class because we want data structures as fast as possible
 //--------------------------------------------------------------------------------------------------------------------
@@ -515,4 +517,6 @@ inline void OrderedArray<Type>::Emplace(Args && ...args)
         InternalEmplace(std::forward<Args>(args)...);
 
     ++m_size;
+}
+
 }

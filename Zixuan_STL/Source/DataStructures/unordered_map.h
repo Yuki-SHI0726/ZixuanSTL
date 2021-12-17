@@ -4,6 +4,8 @@
 #include "list.h"
 #include "vector.h"
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // Custom templated chained hash table implementation
 //--------------------------------------------------------------------------------------------------------------------
@@ -225,4 +227,6 @@ inline void unordered_map<Key, Type>::Destroy()
 		delete[] m_pTable;
 		m_pTable = nullptr;
 	}
+}
+
 }

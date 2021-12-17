@@ -3,6 +3,8 @@
 
 #include "shared_ptr.h"
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. 
 // It must be converted to std::shared_ptr in order to access the referenced object.
@@ -156,4 +158,6 @@ inline SharedPtr<Type, Deleter> WeakPtr<Type, Deleter>::Lock() const
 	SharedPtr<Type, Deleter> sharedPtr;
 	sharedPtr.SetPtr(m_pRawPtr);
 	return sharedPtr;
+}
+
 }

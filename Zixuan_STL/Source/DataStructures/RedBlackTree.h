@@ -6,6 +6,8 @@
 #include <string>
 #include <optional>
 
+namespace zxstl
+{
 //---------------------------------------------------------------------------------------------------------------------
 // Red black tree implementation
 //  - Every node is either red or black.
@@ -1059,4 +1061,6 @@ inline void RedBlackTree<_KeyType, _DataType>::RecursiveInOrderWalk(Node* pNode,
 		func(const_cast<const KeyType&>(pNode->m_key), pNode->m_data);
 		RecursiveInOrderWalk(pNode->m_pRight, std::forward<Func>(func));
 	}
+}
+
 }

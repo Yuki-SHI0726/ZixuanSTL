@@ -4,6 +4,8 @@
 #include <cstring>
 #include <optional>
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // Queue implemented by T array
 //--------------------------------------------------------------------------------------------------------------------
@@ -250,4 +252,5 @@ inline void QueueArray<Type>::Destroy()
 
 	delete[] m_pBuffer;
 	m_pBuffer = nullptr;
+}
 }

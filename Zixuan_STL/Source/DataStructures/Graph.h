@@ -15,6 +15,8 @@
 #include <queue>
 #include <stack>
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // Custom Graph class supporting the following operations
 // - BFS
@@ -80,7 +82,7 @@ public:
 	// Transpose
 	constexpr void TransposeGraph();
 
-	// Search
+	// Searching
 	constexpr bool BreadthFirstSearchFind(NodeId startNodeId, NodeId endNodeId);	
 	template <class Func> constexpr void BreadthFirstSearch(NodeId startNodeId, Func&& func);
 	template <class Func> constexpr void DepthFirstSearchIter(NodeId startNodeId, Func&& func);
@@ -936,4 +938,6 @@ inline constexpr void Graph<Type>::InternalDepthFirstSearch(NodeId nodeId, Func&
 		// Recursive call 
 		InternalDepthFirstSearch(kTargetId, std::forward<Func>(func));
 	}
+}
+
 }

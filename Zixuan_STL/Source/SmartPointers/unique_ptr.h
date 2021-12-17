@@ -1,6 +1,8 @@
 #pragma once
 // Unique pointer implementation by Zixuan Shi
 
+namespace zxstl
+{
 //--------------------------------------------------------------------------------------------------------------------
 // UniquePtr is a smart pointer that owns and manages another object through a pointer and 
 // disposes of that object when the unique_ptr goes out of scope.
@@ -87,4 +89,6 @@ template<class ...Args>
 inline UniquePtr<Type, Deleter> UniquePtr<Type, Deleter>::Make(Args && ...args)
 {
 	return UniquePtr(new Type(std::forward<Args>(args)...));
+}
+
 }

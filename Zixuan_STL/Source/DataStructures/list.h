@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <utility>
 
+namespace zxstl
+{
 // 0 = singly linkedlist
 // 1 = doubly linkedlist
 #define DOUBLY_LINKED 0
@@ -797,4 +799,6 @@ inline void list<Type>::Test()
 
 		system("cls");
 	}
+}
+
 }

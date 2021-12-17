@@ -13,6 +13,8 @@
 #include <optional>
 #include <utility>
 
+namespace zxstl
+{
 // Pivot choosing macro for quicksort
 // 0 = randomized
 // 1 = median of three
@@ -972,9 +974,11 @@ inline void vector<Type>::_update_buffer_with_new_capacity(size_t newCapacity)
 
     // Is trivially copy able
     // if the current buffer has data, copy it over to our new buffer and deallocate
-    std::memcpy(pNewBuffer, m_pBuffer, sizeof(Type) * m_size);
-    delete[] m_pBuffer;
-
+    if (m_pBuffer)
+    {
+        std::memcpy(pNewBuffer, m_pBuffer, sizeof(Type) * m_size);
+        delete[] m_pBuffer;
+    }
     // point to the new buffer and set new capacity
     m_pBuffer = pNewBuffer;
     m_capacity = newCapacity;
@@ -1084,3 +1088,5 @@ inline size_t vector<Type>::_get_mid_index(size_t start, size_t end) const
     }
 }
 #endif
+
+}
