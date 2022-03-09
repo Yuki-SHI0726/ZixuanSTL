@@ -4,7 +4,7 @@
 // 2 = longest
 #define PATH_CHOICE 1
 
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 #include "Utils/Math/Vector2.h"
 
 #include <vector>
@@ -91,7 +91,7 @@ public:
 	// Path-finding
 	template <class Func> constexpr void RunDijkstraSearch(NodeId startNodeId, Func&& func);
 	template <class Func> constexpr std::vector<NodeId> RunDijkstraFind(NodeId startNodeId, NodeId endNodeId, Func&& func);
-	template <class Func> constexpr void AStar(NodeId startNodeId, NodeId destNodeId, Func&& func);
+	template <class Func> constexpr void RunAStar(NodeId startNodeId, NodeId destNodeId, Func&& func);
 	 
 	// Printing
 	constexpr void PrintShortestPath(NodeId node);
@@ -169,10 +169,8 @@ inline typename Graph<Type>::Dist Graph<Type>::Heuristic(NodeId sourceNodeId, No
 template<class Type>
 inline constexpr Vector2 Graph<Type>::GetXYFromIndex(NodeId id) const
 {
-	auto kWorldWidth = 1;
-	auto kWorldWidth = 2;
-	float y = static_cast<float>(id / kWorldWidth);
-	float x = static_cast<float>(id % kWorldWidth);
+	float y = static_cast<float>(id / 5);
+	float x = static_cast<float>(id % 5);
 	return Vector2(x, y);
 }
 
@@ -328,7 +326,7 @@ inline constexpr void Graph<Type>::PrintShortestPath(NodeId nodeId)
 
 	assert(nodeId < m_vertices.size());
 	PrintShortestPath(m_vertices[nodeId].m_prev);
-	std::cout << m_vertices[nodeId].m_data << " -> ";
+	std::cout << m_vertices[nodeId].m_data << "(" << m_vertices[nodeId].m_id << ")" << " -> ";
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -843,11 +841,12 @@ inline constexpr std::vector<typename Graph<Type>::NodeId> Graph<Type>::RunDijks
 
 	if (hasFoundTarget)
 	{
-		GraphVertex* pTarget = m_vertices[endNodeId];
-		while (pTarget->m_pPrev->m_id != startNodeId)
+		NodeId targetId = m_vertices[endNodeId].m_id;
+		while (m_vertices[targetId].m_prev != startNodeId && 
+			   m_vertices[m_vertices[targetId].m_prev].m_id != startNodeId)
 		{
-			path.emplace_back(pTarget->m_id);
-			pTarget = pTarget->m_pPrev;
+			path.emplace_back(targetId);
+			targetId = m_vertices[targetId].m_prev;
 		}
 	}
 
@@ -856,7 +855,7 @@ inline constexpr std::vector<typename Graph<Type>::NodeId> Graph<Type>::RunDijks
 
 template<class Type>
 template<class Func>
-inline constexpr void Graph<Type>::AStar(NodeId startNodeId, NodeId destNodeId, Func&& func)
+inline constexpr void Graph<Type>::RunAStar(NodeId startNodeId, NodeId destNodeId, Func&& func)
 {
 	// initialize single source
 	for (GraphVertex& node : m_vertices)

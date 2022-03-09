@@ -31,6 +31,12 @@
     <Filter Include="Utils\Timing">
       <UniqueIdentifier>{55f3ead2-847d-4321-8c6f-4b1b936cb457}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{9d7d0ad2-6231-46fb-99c7-af4a18a34356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Graph">
+      <UniqueIdentifier>{edbd5a1c-c3ba-476a-b201-5cff3036a791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Main.cpp">
@@ -51,9 +57,8 @@
     <ClCompile Include="Source\Utils\Timing\HighPrecisionTimer.cpp">
       <Filter>Utils\Timing</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\StructureManager.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
+    <ClCompile Include="Source\Tests\GraphUnitTestsMain.cpp" />
+    <ClCompile Include="Source\Tests\StructureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\DataStructures\BinarySearchTree.h">
@@ -140,14 +145,12 @@
     <ClInclude Include="Source\Utils\OBJLoader.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\StructureManager.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SmartPointers\shared_ptr.h">
       <Filter>SmartPointers</Filter>
     </ClInclude>
     <ClInclude Include="Source\SmartPointers\weak_ptr.h">
       <Filter>SmartPointers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Tests\StructureManager.h" />
   </ItemGroup>
 </Project>

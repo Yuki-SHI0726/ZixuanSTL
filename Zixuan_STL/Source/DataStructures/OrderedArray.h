@@ -1,6 +1,4 @@
 #pragma once
-#include "Utils/StructureManager.h"
-
 #include <assert.h>
 #include <cstring>
 #include <type_traits>
@@ -266,7 +264,6 @@ inline void OrderedArray<Type>::Test()
     bool isIncreasingOrder = true;
     char operationInput = ' ';
 
-    // I'm tired typing in initial size and elements to test stuff
 #if _DEBUG
     // Create array
     OrderedArray<Type> orderedArray{ static_cast<size_t>(12) };

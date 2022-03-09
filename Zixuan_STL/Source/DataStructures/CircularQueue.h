@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 
 namespace zxstl
 {

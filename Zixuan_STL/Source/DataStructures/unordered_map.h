@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 #include "list.h"
 #include "vector.h"
 

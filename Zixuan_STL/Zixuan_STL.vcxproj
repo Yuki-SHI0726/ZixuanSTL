@@ -20,11 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Main.cpp" />
+    <ClCompile Include="Source\Tests\GraphUnitTestsMain.cpp" />
+    <ClCompile Include="Source\Tests\StructureManager.cpp" />
     <ClCompile Include="Source\Utils\ECS\Actor\Actor.cpp" />
     <ClCompile Include="Source\Utils\ECS\Components\ComponentBase.cpp" />
     <ClCompile Include="Source\Utils\ECS\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Utils\Log\Log.cpp" />
-    <ClCompile Include="Source\Utils\StructureManager.cpp" />
     <ClCompile Include="Source\Utils\Timing\HighPrecisionTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,7 @@
     <ClInclude Include="Source\SmartPointers\shared_ptr.h" />
     <ClInclude Include="Source\SmartPointers\unique_ptr.h" />
     <ClInclude Include="Source\SmartPointers\weak_ptr.h" />
+    <ClInclude Include="Source\Tests\StructureManager.h" />
     <ClInclude Include="Source\Utils\ECS\Actor\Actor.h" />
     <ClInclude Include="Source\Utils\ECS\Actor\TActor.h" />
     <ClInclude Include="Source\Utils\ECS\Components\ComponentBase.h" />
@@ -56,7 +58,6 @@
     <ClInclude Include="Source\Utils\Math\Vector2.h" />
     <ClInclude Include="Source\Utils\Math\Vector3.h" />
     <ClInclude Include="Source\Utils\OBJLoader.h" />
-    <ClInclude Include="Source\Utils\StructureManager.h" />
     <ClInclude Include="Source\Utils\Timing\HighPrecisionTimer.h" />
     <ClInclude Include="Source\Utils\Timing\SimpleInstrumentationProfiler.h" />
   </ItemGroup>
@@ -66,31 +67,32 @@
     <ProjectGuid>{f12f6986-f66e-4c45-897d-ab6104dcca9e}</ProjectGuid>
     <RootNamespace>ZixuanSTL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ZixuanSTL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -116,21 +118,29 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Output\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Output\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Output\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Output\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(ProjectName)_$(Configuration)_$(PlatformShortName)_Temp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

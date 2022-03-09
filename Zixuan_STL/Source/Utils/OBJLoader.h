@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "Vector3.h"
-#include "Vector2.h"
-#include "Log.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
+#include "Log/Log.h"
 
 #include <vector>
 #include <fstream>
@@ -17,10 +17,10 @@ static constexpr size_t kVertexNormalsIndex = 2;
 
 enum class FaceType
 {
-	kPositionOnly,					// f 1 2 3				� Vertex position only
-	kPositionTextureCoords,			// f 1/4 2/3 3/1		� Vertex position and texture coordinates
-	kPositionNormal,				// f 1//3 2//7 3//4		� Vertex position and normals
-	kPositionTextureCoordsNormal	// f 1/4/3 2/3/7 3/1/4  � Vertex position, texture coordinates, and normals
+	kPositionOnly,					// f 1 2 3				 Vertex position only
+	kPositionTextureCoords,			// f 1/4 2/3 3/1		 Vertex position and texture coordinates
+	kPositionNormal,				// f 1//3 2//7 3//4		 Vertex position and normals
+	kPositionTextureCoordsNormal	// f 1/4/3 2/3/7 3/1/4   Vertex position, texture coordinates, and normals
 };
 
 struct Vertex

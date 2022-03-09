@@ -1,4 +1,4 @@
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 
 #include "vector.h"
 #include "OrderedArray.h"
@@ -71,7 +71,7 @@ void Func(int data, int* pPtr)
 	std::cout << "Foo" << std::endl;
 }
 
-int main()
+int appmain()
 {
 	bool shouldQuit = false;
 	StructureManager::Get().Init();

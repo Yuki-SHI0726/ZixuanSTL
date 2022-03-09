@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 
 #include <iostream>
 #include <assert.h>

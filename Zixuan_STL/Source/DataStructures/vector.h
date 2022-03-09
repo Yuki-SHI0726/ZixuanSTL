@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/StructureManager.h"
+#include "Tests/StructureManager.h"
 #include "Utils/Helpers.h"
 
 #include <assert.h>
@@ -156,7 +156,7 @@ public:
 
     // Additional stuff
     void Print(bool horizontal = true) const;
-    std::optional<size_t> Search(const Type& val) const;
+    std::optional<size_t> Find(const Type& val) const;
     void BubbleSort();
     void SelectionSort();
     void InsertionSort();
@@ -689,12 +689,12 @@ inline void vector<Type>::Print(bool horizontal /*= true*/) const
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Linear search
+// Linear search. Return the element's index if found in the buffer
 // Time:  O(n)
 // Space: O(1)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 template<class Type>
-inline std::optional<size_t> vector<Type>::Search(const Type& val) const
+inline std::optional<size_t> vector<Type>::Find(const Type& val) const
 {
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
 
