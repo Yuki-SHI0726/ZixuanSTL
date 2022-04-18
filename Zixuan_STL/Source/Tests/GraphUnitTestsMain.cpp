@@ -114,7 +114,7 @@ zxstl::Graph<char> InitGraph()
 	return graph;
 }
 
-int main()
+int graphtest()
 {
 	zxstl::Graph<char> graph = InitGraph();
 

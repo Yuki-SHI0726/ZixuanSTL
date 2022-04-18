@@ -429,7 +429,7 @@ inline constexpr void vector<Type>::insert(size_t index, const Type& val)
 {
     assert(index <= m_size);
 
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -450,7 +450,7 @@ inline constexpr void vector<Type>::insert(size_t index, Type&& val)
 {
     assert(index <= m_size);
 
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -472,7 +472,7 @@ inline constexpr void vector<Type>::emplace(size_t index, Args&&... args)
 {
     assert(index <= m_size);
 
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     Type* pTypeArray = reinterpret_cast<Type*>(m_pBuffer);
@@ -511,7 +511,7 @@ constexpr void vector<Type>::erase(size_t index)
 template<class Type>
 constexpr void vector<Type>::push_back(const Type& val)
 {
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
@@ -525,7 +525,7 @@ constexpr void vector<Type>::push_back(const Type& val)
 template<class Type>
 constexpr void vector<Type>::push_back(Type&& val)
 {
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(val); 
@@ -542,7 +542,7 @@ template<class Type>
 constexpr void vector<Type>::push_front(const Type& val)
 {
     // If the array is full, expand it
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
@@ -566,7 +566,7 @@ template<class Type>
 constexpr void vector<Type>::push_front(Type&& val)
 {    
     // If the array is full, expand it
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity * kExpandMultiplier);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.
@@ -587,7 +587,7 @@ template<class Type>
 template<class ...Args>
 constexpr void vector<Type>::emplace_back(Args&& ...args)
 {
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
 
     new(m_pBuffer + (m_size * sizeof(Type))) Type(std::forward<Args>(args)...);
@@ -604,7 +604,7 @@ template<class Type>
 template<class ...Args>
 constexpr void vector<Type>::emplace_front(Args&& ...args)
 {
-    if (m_size >= m_capacity)
+    if (m_size >= m_capacity || !m_pBuffer)
         _update_buffer_with_new_capacity(m_capacity > 0 ? static_cast<size_t>(m_capacity * kExpandMultiplier) : kInitialCapacity);
 
     // Shift each element one spot towards to the end in order to create a spot for the new inserted value.

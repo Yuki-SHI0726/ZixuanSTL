@@ -71,7 +71,7 @@ void Func(int data, int* pPtr)
 	std::cout << "Foo" << std::endl;
 }
 
-int appmain()
+int main()
 {
 	bool shouldQuit = false;
 	StructureManager::Get().Init();
